@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>포트폴리오 와이어프레임</title>
+<style>
+  :root { --border:#bbb; --muted:#666; --bg1:#f6f6f4; --bg0:#ffffff; }
+  body { font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; margin:0; background:var(--bg0); color:#222; }
+  header.app { position:sticky; top:0; background:#fff; border-bottom:1px solid var(--border); padding:12px 24px; display:flex; gap:10px; z-index:10; }
+  .tab { font-size:13px; padding:6px 14px; border:1px solid var(--border); border-radius:6px; background:#fff; cursor:pointer; }
+  .tab.active { background:#222; color:#fff; border-color:#222; }
+  main { max-width:820px; margin:0 auto; padding:32px 24px 80px; }
+  .panel { display:none; }
+  .panel.active { display:block; }
+  .box { border:1px dashed #999; border-radius:8px; background:var(--bg1); display:flex; align-items:center; justify-content:center; text-align:center; }
+  .row { display:flex; }
+  .label { font-size:12px; color:var(--muted); padding:4px; }
+  .chip { font-size:12px; color:var(--muted); border:1px dashed #999; border-radius:999px; padding:4px 12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px; }
+  h3.section { font-size:13px; color:var(--muted); margin:22px 0 8px; font-weight:600; }
+  footer.note { max-width:820px; margin:0 auto 40px; padding:0 24px; font-size:12px; color:#999; }
+  .ext-link { font-size:12px; color:#3b3f8f; border:1px dashed #9aa0e0; border-radius:999px; padding:5px 12px; background:#f6f6ff; cursor:pointer; white-space:nowrap; }
+</style>
+</head>
+<body>
+<header class="app" style="justify-content:space-between;">
+  <div class="row" style="gap:10px;">
+    <button class="tab active" data-t="home">홈</button>
+    <button class="tab" data-t="about">소개</button>
+    <button class="tab" data-t="list">프로젝트 목록</button>
+    <button class="tab" data-t="detail">프로젝트 상세</button>
+  </div>
+  <span class="ext-link">블로그 ↗ (blog.jeongtaehee.com)</span>
+</header>
+<main>
+
+  <section class="panel active" id="home">
+    <div class="box row" style="height:52px; justify-content:space-between; align-items:center; padding:0 16px;">
+      <span class="label">로고 · 정태희</span>
+      <span class="label">홈 / 소개 / 포트폴리오 / 블로그 ↗ / 문의하기</span>
+    </div>
+
+    <!-- 인트로 히어로: 이름 · 타이틀 · 한 줄 소개 -->
+    <div class="box" style="height:auto; min-height:260px; flex-direction:column; align-items:flex-start; gap:10px; text-align:left; padding:28px 24px; margin-top:12px;">
+      <span class="label" style="font-size:11px;">프로필 사진</span>
+      <div style="font-size:20px; font-weight:700; color:#222;">정태희</div>
+      <div style="font-size:13px; color:var(--muted); font-weight:600;">IT 프로덕트 매니저(PM) · PO</div>
+      <div style="font-size:14px; color:#222; font-weight:600; margin-top:4px;">복잡한 도메인을 제품으로 구현하고, AI로 다음 단계를 준비하는 PM/PO</div>
+      <p style="font-size:12.5px; color:var(--muted); line-height:1.6; margin:6px 0 0; max-width:620px;">
+        10년 넘는 IT 개발·기획 경력을 바탕으로 SaaS 솔루션 운영·고도화(PO), 신규 솔루션 0→1 출시(PM), 대기업·공공기관 온프레미스 구축까지 다양한 방식으로 제품을 만들어왔습니다.
+        최근에는 기획 산출물 작성과 프로젝트 관리에 생성형 AI를 적극 활용하고 있으며, 이 경험을 제품의 AI 기능 확장 기획으로 넓혀가고 있습니다.
+      </p>
+      <div class="row" style="gap:8px; margin-top:10px;">
+        <span class="chip">소개 자세히 보기</span>
+        <span class="chip">포트폴리오 보기</span>
+      </div>
+    </div>
+
+    <!-- 지향점 배너: AI 기획 PM/PO로의 방향성 강조 -->
+    <div class="box" style="height:auto; flex-direction:column; align-items:flex-start; gap:4px; text-align:left; padding:16px 24px; margin-top:12px; background:#f6f6ff; border-color:#9aa0e0;">
+      <span class="label" style="font-weight:700; color:#3b3f8f; font-size:12.5px;">"AI로 일하는 PM에서, AI를 만드는 PM으로"</span>
+      <span class="label" style="font-size:11.5px;">생성형 AI 기반 기획 문서화·프로젝트 관리 경험을 제품의 AI 기능(AI Agent 등) 확장 기획으로 넓혀가고 있습니다.</span>
+    </div>
+
+    <h3 class="section">핵심 역량</h3>
+    <div class="row" style="gap:8px; flex-wrap:wrap;">
+      <span class="chip">기술 기반 기획</span>
+      <span class="chip">도메인 조율</span>
+      <span class="chip">생성형 AI 기획 문서화</span>
+      <span class="chip">제품 AI 기능 확장 기획</span>
+      <span class="chip">이해관계자 협업 리딩</span>
+    </div>
+
+    <h3 class="section">대표 경력</h3>
+    <div class="row" style="gap:12px;">
+      <div class="box" style="height:120px; flex:1; flex-direction:column; gap:4px; padding:10px;">
+        <span class="label" style="font-weight:600; color:#222;">SaaS 운영·고도화 PO</span>
+        <span class="label">MSDS 구독형 서비스 · 백로그 · 계약 · 데이터 관리</span>
+      </div>
+      <div class="box" style="height:120px; flex:1; flex-direction:column; gap:4px; padding:10px;">
+        <span class="label" style="font-weight:600; color:#222;">0→1 솔루션 제작 PM</span>
+        <span class="label">Carbon Slim 등 신규 제품 기획~출시·시연</span>
+      </div>
+      <div class="box" style="height:120px; flex:1; flex-direction:column; gap:4px; padding:10px;">
+        <span class="label" style="font-weight:600; color:#222;">온프레미스 구축 PM</span>
+        <span class="label">대기업·공공기관 다수 구축 (1억 미만 다수 사업)</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:10px;"><span class="label">→ 포트폴리오 전체보기</span></div>
+
+    <div class="box" style="height:48px; margin-top:12px;"><span class="label">SNS · suraholic@gmail.com · Footer</span></div>
+  </section>
+
+  <section class="panel" id="about">
+    <div class="box row" style="height:52px; align-items:center; padding:0 16px;"><span class="label">Nav</span></div>
+    <div class="row" style="gap:18px; margin-top:12px;">
+      <div class="box" style="width:150px; height:150px; flex-shrink:0;"><span class="label">프로필 사진</span></div>
+      <div class="box" style="flex:1; height:150px;"><span class="label">소개 텍스트</span></div>
+    </div>
+    <h3 class="section">기술 스택</h3>
+    <div class="row" style="gap:8px; flex-wrap:wrap;">
+      <span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Node</span><span class="chip">Figma</span>
+    </div>
+    <h3 class="section">경력 / 교육 타임라인</h3>
+    <div class="box" style="height:120px;"><span class="label">타임라인 리스트</span></div>
+  </section>
+
+  <section class="panel" id="list">
+    <div class="box row" style="height:52px; align-items:center; padding:0 16px;"><span class="label">Nav</span></div>
+    <div class="row" style="gap:8px; margin-top:12px;">
+      <span class="chip">전체</span><span class="chip">웹</span><span class="chip">앱</span><span class="chip">디자인</span>
+    </div>
+    <div class="grid" style="margin-top:12px;">
+      <div class="box" style="height:140px;"><span class="label">썸네일 · 제목 · 태그</span></div>
+      <div class="box" style="height:140px;"><span class="label">썸네일 · 제목 · 태그</span></div>
+      <div class="box" style="height:140px;"><span class="label">썸네일 · 제목 · 태그</span></div>
+      <div class="box" style="height:140px;"><span class="label">썸네일 · 제목 · 태그</span></div>
+    </div>
+    <div style="text-align:center; margin-top:14px;"><span class="label">더 보기 / 페이지네이션</span></div>
+  </section>
+
+  <section class="panel" id="detail">
+    <div class="box row" style="height:52px; align-items:center; padding:0 16px;"><span class="label">Nav</span></div>
+    <div class="box" style="height:100px; margin-top:12px; flex-direction:column; gap:6px;">
+      <span class="label">프로젝트 제목 · 기간 · 역할</span>
+      <div class="row" style="gap:6px;"><span class="chip">GitHub</span><span class="chip">Live Demo</span></div>
+    </div>
+    <h3 class="section">기획의도 (배경 · 목표)</h3>
+    <div class="box" style="height:80px;"><span class="label">텍스트 블록</span></div>
+    <h3 class="section">주요 기능</h3>
+    <div class="box" style="height:80px;"><span class="label">불릿 리스트</span></div>
+    <h3 class="section">기술사양 (스택 · 아키텍처)</h3>
+    <div class="row" style="gap:8px; flex-wrap:wrap;">
+      <span class="chip">Frontend</span><span class="chip">Backend</span><span class="chip">DB</span><span class="chip">Infra</span>
+    </div>
+    <h3 class="section">스크린샷 / 데모</h3>
+    <div class="row" style="gap:12px;">
+      <div class="box" style="height:100px; flex:1;"><span class="label">이미지 1</span></div>
+      <div class="box" style="height:100px; flex:1;"><span class="label">이미지 2</span></div>
+    </div>
+    <h3 class="section">트러블슈팅 / 회고</h3>
+    <div class="box" style="height:70px;"><span class="label">텍스트 블록</span></div>
+    <div class="row" style="justify-content:space-between; margin-top:16px;">
+      <span class="label">← 이전 프로젝트</span><span class="label">다음 프로젝트 →</span>
+    </div>
+  </section>
+
+</main>
+<footer class="note">저해상도 와이어프레임 — 레이아웃/구조 참고용, 실제 디자인(색상·폰트·이미지)은 포함하지 않음.</footer>
+<script>
+document.querySelectorAll('.tab').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.t).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

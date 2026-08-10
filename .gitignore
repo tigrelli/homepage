@@ -1,0 +1,17 @@
+# 환경변수 / 키
+.env
+.env.*
+*.key
+*secret*
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+*.swp
+
+# WSL 다운로드 메타데이터
+*:Zone.Identifier
+
+# 개인정보 포함 문서 (Public 저장소 비공개 유지, 로컬에만 보관)
+docs/이력서.pdf
+docs/자기소개서.pdf
