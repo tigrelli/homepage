@@ -268,7 +268,7 @@ button:focus-visible {
 /* ── 대표 경력 카드 ───────────────────────────────── */
 .career-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
@@ -279,17 +279,22 @@ button:focus-visible {
   padding: 20px;
 }
 
+.career-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .career-index {
-  display: block;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--accent-strong);
-  margin-bottom: 10px;
 }
 
 .career-title {
-  margin: 0 0 6px;
+  margin: 0;
   font-size: 1rem;
   font-weight: 700;
 }
