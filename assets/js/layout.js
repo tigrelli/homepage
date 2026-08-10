@@ -5,16 +5,25 @@ const SITE_NAV = [
   { href: "/blog/", label: "블로그" },
 ];
 
+function isCurrentPage(href) {
+  const path = window.location.pathname;
+  if (href === "/") return path === "/" || path === "/index.html";
+  return path === href || path === href.replace(/\/$/, "/index.html");
+}
+
 function renderHeader() {
-  const nav = SITE_NAV.map(
-    (item) => `<a href="${item.href}">${item.label}</a>`
-  ).join("");
-  return `<header><nav>${nav}</nav></header>`;
+  const nav = SITE_NAV.map((item) => {
+    const current = isCurrentPage(item.href);
+    const cls = current ? "nav-link nav-link-current" : "nav-link";
+    const aria = current ? ' aria-current="page"' : "";
+    return `<a href="${item.href}" class="${cls}"${aria}>${item.label}</a>`;
+  }).join("");
+  return `<header class="site-header"><div class="site-header-inner"><a href="/" class="wordmark" aria-label="정태희"><span class="wordmark-badge">TH</span></a><nav class="site-nav">${nav}</nav></div></header>`;
 }
 
 function renderFooter() {
   const year = new Date().getFullYear();
-  return `<footer><p>&copy; ${year} 정태희</p></footer>`;
+  return `<footer class="site-footer"><div class="site-footer-inner"><p class="footer-contact">문의 suraholic@gmail.com</p><p class="footer-copyright">&copy; ${year} 정태희. All rights reserved.</p></div></footer>`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
