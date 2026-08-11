@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지출 관리 특화 가계부 · payLens — 정태희 포트폴리오</title>
+<meta name="description" content="1인 기획자 겸 PM으로 설계부터 배포까지 주도한 지출 관리 특화 가계부 서비스 'payLens' 프로젝트 상세.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg-soft: #F6F5F3;
+    --line: #E7E5E1;
+    --accent: #D98B4A;
+    --accent-deep: #C0752F;
+    --text: #2B2320;
+    --text-muted: #7A6A58;
+    --font-main: "Pretendard", "Noto Sans KR", -apple-system, sans-serif;
+    --font-data: "JetBrains Mono", monospace;
+
+    /* payLens(프로젝트 자체) BI 톤 — 케이스 스터디 콘텐츠 내에서만 사용 */
+    --pl-main: #0B2545;
+    --pl-sub: #134074;
+    --pl-accent: #EE6C4D;
+    --pl-data-soft: #EA580C;
+    --pl-action: #0D9488;
+    --pl-cash: #43A047;
+    --pl-check: #1E88E5;
+    --pl-credit: #FB8C00;
+    --pl-bg: #F8FAFC;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--font-main);
+    color: var(--text);
+    background: var(--bg-soft);
+    margin: 0;
+  }
+  .page {
+    max-width: 1040px;
+    margin: 0 auto;
+    background: var(--bg);
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .logo { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+  nav { display: flex; gap: 30px; font-size: 13.5px; color: var(--text-muted); }
+  nav .active { color: var(--text); font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+  .btn-outline { border: 1px solid var(--text); color: var(--text); padding: 8px 16px; font-size: 12.5px; border-radius: 4px; }
+
+  .breadcrumb { padding: 12px 40px; font-size: 12px; color: var(--text-muted); border-bottom: 1px solid var(--line); }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+
+  .detail-hero { padding: 44px 40px 32px; border-bottom: 1px solid var(--line); }
+  .eyebrow { font-size: 11.5px; letter-spacing: 1.5px; color: var(--accent-deep); font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+  .hero-title { font-size: 30px; font-weight: 800; line-height: 1.3; margin: 0 0 10px; }
+  .hero-title .sub { display: block; font-size: 15px; font-weight: 500; color: var(--text-muted); margin-top: 8px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 22px; font-size: 13px; color: var(--text-muted); margin: 20px 0 22px; }
+  .meta-row b { color: var(--text); font-weight: 600; }
+  .meta-row .mono { font-family: var(--font-data); }
+  .link-btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .link-btn { border: 1px solid var(--line); border-radius: 6px; padding: 9px 15px; font-size: 12.5px; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 7px; background: var(--bg-soft); }
+  .link-btn .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+  .cover-img {
+    height: 260px; margin: 0 40px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--pl-main), var(--pl-sub));
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.85); font-size: 13px; letter-spacing: 0.5px;
+  }
+  .gap { height: 26px; }
+
+  .detail-body { display: grid; grid-template-columns: 200px 1fr; }
+  .toc { padding: 34px 22px; border-right: 1px solid var(--line); font-size: 13px; color: var(--text-muted); align-self: start; position: sticky; top: 0; }
+  .toc a { display: block; padding: 9px 0 9px 12px; color: inherit; text-decoration: none; border-left: 2px solid transparent; }
+  .toc a.active { color: var(--text); font-weight: 700; border-left: 2px solid var(--accent); }
+  .detail-content { padding: 36px 44px 20px; }
+  .content-block { margin-bottom: 46px; scroll-margin-top: 20px; }
+  .content-block h4 { font-size: 12px; color: var(--accent-deep); text-transform: uppercase; letter-spacing: 1.2px; margin: 0 0 16px; font-weight: 700; }
+  .content-block h5 { font-size: 13.5px; margin: 22px 0 10px; font-weight: 700; }
+  .content-block p { font-size: 14.5px; line-height: 1.75; color: var(--text); margin: 0 0 12px; }
+  .content-block ul { margin: 0 0 12px; padding-left: 20px; }
+  .content-block li { font-size: 14px; line-height: 1.7; margin-bottom: 6px; color: var(--text); }
+  .content-block li b { font-weight: 700; }
+
+  /* 4-axis chips (01 개요) */
+  .axis-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0 6px; }
+  .axis-chip { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 8px; padding: 14px 12px; text-align: center; }
+  .axis-chip .num { font-family: var(--font-data); font-size: 11px; color: var(--accent-deep); font-weight: 700; }
+  .axis-chip .name { font-size: 13.5px; font-weight: 700; margin: 6px 0 4px; }
+  .axis-chip .desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.4; }
+
+  /* doc cards (02 기획) */
+  .doc-card { border: 1px solid var(--line); border-radius: 8px; padding: 15px 16px; margin-bottom: 10px; display: flex; gap: 14px; align-items: flex-start; }
+  .doc-icon { width: 38px; height: 46px; border-radius: 4px; background: var(--pl-main); color: #fff; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-size: 9px; font-weight: 700; text-align: center; line-height: 1.2; }
+  .doc-meta .doc-title { font-size: 13.5px; font-weight: 700; margin-bottom: 4px; }
+  .doc-meta .doc-sub { font-size: 12px; color: var(--text-muted); }
+  .note { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  .ia-tree { background: var(--pl-main); color: #dbe6f5; border-radius: 8px; padding: 20px 22px; font-family: var(--font-data); font-size: 12px; line-height: 1.9; overflow-x: auto; margin: 14px 0; }
+  .ia-tree .fade { color: #8fa6c4; }
+
+  /* 03 디자인 */
+  .swatch-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0 20px; }
+  .swatch { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .swatch .chip { height: 46px; }
+  .swatch .info { padding: 8px 10px; }
+  .swatch .info .name { font-size: 11.5px; font-weight: 700; }
+  .swatch .info .hex { font-size: 10.5px; font-family: var(--font-data); color: var(--text-muted); }
+  .concept-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 22px; }
+  .concept-chip { border: 1px solid var(--pl-sub); color: var(--pl-sub); border-radius: 14px; padding: 6px 14px; font-size: 12px; font-weight: 600; }
+
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .gallery-item { height: 150px; border-radius: 8px; background: var(--pl-bg); border: 1px dashed #C9D3DE; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .gallery-item .g-title { font-size: 12.5px; font-weight: 700; color: var(--pl-main); }
+  .gallery-item .g-desc { font-size: 11px; color: var(--text-muted); padding: 0 16px; text-align: center; }
+
+  /* 04 개발 */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+  .tag { border: 1px solid var(--line); background: var(--bg-soft); padding: 6px 13px; font-size: 12px; border-radius: 12px; color: var(--text); font-family: var(--font-data); }
+
+  /* 05 결과 */
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+  .stat-card { border: 1px solid var(--line); border-radius: 8px; padding: 20px 14px; text-align: center; background: var(--bg-soft); }
+  .stat-num { font-family: var(--font-data); font-size: 24px; font-weight: 700; color: var(--accent-deep); margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); }
+
+  .prevnext { display: flex; justify-content: space-between; padding: 26px 44px; border-top: 1px solid var(--line); font-size: 12.5px; }
+  .prevnext a { color: var(--text-muted); text-decoration: none; }
+  .prevnext a.mid { color: var(--accent-deep); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <div class="logo">정태희</div>
+    <nav>
+      <span>홈</span><span>소개 · 이력</span><span class="active">포트폴리오</span><span>문의하기</span>
+    </nav>
+    <div class="btn-outline">의뢰 문의</div>
+  </header>
+
+  <div class="breadcrumb"><a href="#">포트폴리오</a> &gt; 지출 관리 특화 가계부 · payLens</div>
+
+  <div class="detail-hero">
+    <div class="eyebrow">Portfolio — 서비스 기획 · PM</div>
+    <h1 class="hero-title">지출 관리 특화 가계부
+      <span class="sub">payLens — "지출을 4개 축으로 쪼개서 보면, 돈이 어디로 새는지 보인다"</span>
+    </h1>
+    <div class="meta-row">
+      <span>기간: <b class="mono">2026.06 – 2026.07 (1차 완료)</b> · 2차 기획 진행중</span>
+      <span>역할: <b>PM · 기획 (1인)</b></span>
+      <span>팀 구성: <b>1인 + AI 페어프로그래밍(Claude Code)</b></span>
+      <span>기술: <b>Next.js · Supabase · Tailwind · Redis</b></span>
+    </div>
+    <div class="link-btn-row">
+      <a class="link-btn" href="#"><span class="dot"></span>GitHub 저장소 (모노레포, 비공개)</a>
+      <a class="link-btn" href="#"><span class="dot"></span>아키텍처 설계서</a>
+      <a class="link-btn" href="#"><span class="dot"></span>기능명세서 · IA</a>
+      <a class="link-btn" href="#"><span class="dot"></span>디자인 가이드 (payLens BI)</a>
+    </div>
+  </div>
+
+  <div class="cover-img">대시보드 커버 이미지 — 실제 화면 스크린샷 삽입 예정</div>
+  <div class="gap"></div>
+
+  <div class="detail-body">
+    <div class="toc">
+      <a href="#overview" class="active">01 개요</a>
+      <a href="#plan">02 기획 (PRD / IA)</a>
+      <a href="#design">03 디자인</a>
+      <a href="#dev">04 개발</a>
+      <a href="#result">05 결과 · 회고</a>
+    </div>
+
+    <div class="detail-content">
+
+      <div class="content-block" id="overview">
+        <h4>01. 개요</h4>
+        <p>기존 가계부 앱 대부분은 지출을 "카테고리" 한 축으로만 분류합니다. 그런데 실제로 "이번 달에 왜 이렇게 썼지?"를 알고 싶을 때 필요한 건 카테고리뿐 아니라 <b>무엇으로 결제했는지, 어디서 썼는지, 구체적으로 뭘 샀는지</b>까지입니다. payLens는 지출 1건을 아래 4개의 독립된 축으로 분해해 설계한 지출 관리 특화 가계부입니다.</p>
+        <div class="axis-row">
+          <div class="axis-chip"><div class="num">① HOW</div><div class="name">지출분류</div><div class="desc">결제수단 — 현금 / 계좌 / 카드(카드사별)</div></div>
+          <div class="axis-chip"><div class="num">② WHAT</div><div class="name">지출항목</div><div class="desc">카테고리 — 식료품, 의류, 보험 등</div></div>
+          <div class="axis-chip"><div class="num">③ WHERE</div><div class="name">지출처</div><div class="desc">가맹점 — 이마트, 쿠팡 등</div></div>
+          <div class="axis-chip"><div class="num">④ WHAT EXACTLY</div><div class="name">상세내용</div><div class="desc">선택 — 품목 + 수량/단위, 자동 합산</div></div>
+        </div>
+        <p>PM(기획자) 1인이 Claude Code와의 페어프로그래밍으로 아키텍처 설계부터 DB 스키마, 화면 구현, 테스트, 프로덕션 배포까지 전 과정을 주도했습니다. 메인 가계부를 "지출 데이터 허브"로 두고, 이벤트(Webhook) 기반으로 관리비·구독료·카드내역 등 서브앱을 붙일 수 있는 확장형 구조로 설계했습니다.</p>
+      </div>
+
+      <div class="content-block" id="plan">
+        <h4>02. 기획 (PRD / IA)</h4>
+        <p>기획 문서는 <b>아키텍처 설계 → 기능명세(IA) → WBS(작업분해) → 진행현황</b> 4단으로 분리해 관리했습니다. 계획 문서(WBS)는 진행 중 고치지 않고, 진행 상황만 별도 체크리스트 파일에 반영하는 방식으로 "지금 계획이 뭐였는지"와 "지금 어디까지 됐는지"가 섞이지 않게 했습니다 — AI와 여러 세션에 걸쳐 협업할 때 컨텍스트가 흐트러지지 않도록 하기 위한 장치였습니다.</p>
+
+        <div class="doc-card">
+          <div class="doc-icon">ARCH</div>
+          <div class="doc-meta"><div class="doc-title">가계부_아키텍처_설계.md</div><div class="doc-sub">전체 구조도(Mermaid), 지출 4축 데이터 모델, ERD, 로드맵 8장 구성</div></div>
+        </div>
+        <div class="doc-card">
+          <div class="doc-icon">SPEC</div>
+          <div class="doc-meta"><div class="doc-title">기능명세서_IA.md</div><div class="doc-sub">F-코드 기반 기능 명세 + 정보구조(IA), 실제 구현 완료 메뉴 표 별도 관리</div></div>
+        </div>
+        <div class="doc-card">
+          <div class="doc-icon">WBS</div>
+          <div class="doc-meta"><div class="doc-title">WBS.md / 진행현황.md</div><div class="doc-sub">TASK 단위 세션 추정 + PM 승인 후에만 체크되는 진행 체크리스트</div></div>
+        </div>
+
+        <h5>정보구조(IA) — 전체 메뉴 트리</h5>
+        <div class="ia-tree">
+payLens<br>
+├─ 0. 인증 <span class="fade">— 회원가입 · 로그인(이메일/구글) · 계정 설정</span><br>
+├─ 1. 대시보드 <span class="fade">— 개요 · 항목별/지출분류별 통계 · 지출처 Top10 · 상세항목 Top10(드릴다운) · 단가 분석</span><br>
+├─ 2. 지출 입력/관리 <span class="fade">— 신규/수정 입력 · 내역 리스트·필터 · 캘린더 조회(+빠른입력)</span><br>
+├─ 3. 마스터 데이터 관리 <span class="fade">— 지출분류 · 지출항목 · 지출처 · 품목 · 단위</span><br>
+├─ 4. 예산 관리 <span class="fade">— 전체예산 → 카테고리별 한도 · 소진율 게이지</span><br>
+├─ 5. 관리비 명세서 <span class="fade">— 2차, 기획 중 (사진 업로드 → OCR → 통계)</span><br>
+└─ 6. 관리자 전용 <span class="fade">— 동의어 사전(SYNONYM_DICTIONARY) 관리</span>
+        </div>
+        <div class="note">※ 위 트리는 최종 계획도이며, 실제 사이드바에는 지금까지 완성된 화면만 노출하도록 별도 표로 관리해 죽은 링크가 생기지 않게 했습니다.</div>
+      </div>
+
+      <div class="content-block" id="design">
+        <h4>03. 디자인</h4>
+        <p>서비스 자체 BI(브랜드 아이덴티티)로 <b>payLens</b>를 별도로 정의했습니다. 컨셉은 "Refined Navy with Gold Accent" — 신뢰감 있는 네이비 베이스에 데이터 강조용 포인트 컬러를 얹는 방향입니다.</p>
+        <div class="concept-row">
+          <div class="concept-chip">Focus</div>
+          <div class="concept-chip">Clarity</div>
+          <div class="concept-chip">Growth</div>
+          <div class="concept-chip">Insight</div>
+        </div>
+        <div class="swatch-row">
+          <div class="swatch"><div class="chip" style="background:var(--pl-main);"></div><div class="info"><div class="name">Deep Navy</div><div class="hex">#0B2545 · 메인/헤더</div></div></div>
+          <div class="swatch"><div class="chip" style="background:var(--pl-action);"></div><div class="info"><div class="name">Action Teal</div><div class="hex">#0D9488 · CTA/링크</div></div></div>
+          <div class="swatch"><div class="chip" style="background:var(--pl-accent);"></div><div class="info"><div class="name">Data Accent</div><div class="hex">#EE6C4D · 지출 경고</div></div></div>
+          <div class="swatch"><div class="chip" style="background:var(--pl-credit);"></div><div class="info"><div class="name">Credit Orange</div><div class="hex">#FB8C00 · 신용카드 태그</div></div></div>
+        </div>
+        <p>결제수단 태그는 현금(<span style="color:var(--pl-cash);font-weight:700;">Green</span>) · 체크카드(<span style="color:var(--pl-check);font-weight:700;">Blue</span>) · 신용카드(<span style="color:var(--pl-credit);font-weight:700;">Orange</span>) 3색으로 명확히 구분했고, 오렌지 계열은 "데이터 강조 전용", 틸 컬러는 "클릭 가능한 액션 전용"으로 역할을 분리해 두 의미가 섞이지 않도록 규칙을 문서화했습니다. 폰트는 본문 Pretendard, 통계 수치는 JetBrains Mono로 자릿수를 맞췄습니다.</p>
+        <h5>주요 화면</h5>
+        <div class="gallery">
+          <div class="gallery-item"><div class="g-title">홈 대시보드</div><div class="g-desc">이번달 총지출·예산 소진율 요약 + 통계 위젯 6종</div></div>
+          <div class="gallery-item"><div class="g-title">지출 입력</div><div class="g-desc">직접입력 / 상세항목(품목·수량·단위) 입력 토글</div></div>
+          <div class="gallery-item"><div class="g-title">캘린더 조회</div><div class="g-desc">일자별 지출 카드 + "+"로 빠른 입력 팝업</div></div>
+          <div class="gallery-item"><div class="g-title">설정 · 마스터데이터</div><div class="g-desc">지출분류/지출항목/지출처/품목 CRUD</div></div>
+        </div>
+        <div class="note">※ 실제 프로덕션 스크린샷은 준비 중 — 위 화면 구성은 기능명세서·IA 기준입니다.</div>
+      </div>
+
+      <div class="content-block" id="dev">
+        <h4>04. 개발</h4>
+        <div class="tag-row">
+          <div class="tag">Next.js (App Router)</div>
+          <div class="tag">TypeScript</div>
+          <div class="tag">Tailwind CSS</div>
+          <div class="tag">shadcn/ui</div>
+          <div class="tag">pnpm + Turborepo</div>
+          <div class="tag">Supabase (Postgres/Auth/RLS)</div>
+          <div class="tag">Upstash Redis</div>
+          <div class="tag">Recharts</div>
+          <div class="tag">Vitest</div>
+          <div class="tag">Playwright</div>
+          <div class="tag">GitHub Actions</div>
+          <div class="tag">Vercel</div>
+        </div>
+        <ul>
+          <li><b>모노레포 구조</b> — pnpm workspace + Turborepo로 <span class="mono" style="font-family:var(--font-data)">packages/ui · types · utils · supabase-client</span> 등 공통 코드를 분리해 향후 서브앱(관리비/구독/카드내역) 확장을 고려한 구조로 설계.</li>
+          <li><b>통계 성능 최적화</b> — Materialized View(지출분류/품목/단가별 집계) + Redis 캐시로 대시보드 통계를 서빙, 원본 JOIN 대비 최대 <b>6배</b> 빠른 조회 성능을 실측(<span class="mono" style="font-family:var(--font-data)">EXPLAIN ANALYZE</span>)으로 검증.</li>
+          <li><b>DB 보안</b> — 8개 핵심 테이블 전체에 RLS(Row Level Security) 적용, 9개 테이블 대상으로 타 사용자 데이터 접근 차단을 REST API 레벨에서 직접 검증하는 별도 보안 테스트 작성.</li>
+          <li><b>입력 UX</b> — 자유 텍스트로 입력한 수량/단위를 자동 구조화(예: "1개" → 수량 1 · 단위 개), 편집거리(Levenshtein) 기반 유사 품목 제안, 지출처·품목 자동완성(find-or-create) 구현.</li>
+          <li><b>CI/CD</b> — GitHub Actions로 lint/typecheck/test/build 자동화, main 브랜치 push 시 Supabase 마이그레이션 자동 배포, Vercel로 프론트 배포.</li>
+        </ul>
+      </div>
+
+      <div class="content-block" id="result">
+        <h4>05. 결과 · 회고</h4>
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-num">90/90</div><div class="stat-label">단위 테스트 통과</div></div>
+          <div class="stat-card"><div class="stat-num">46/46</div><div class="stat-label">E2E 테스트 통과</div></div>
+          <div class="stat-card"><div class="stat-num">최대 6배</div><div class="stat-label">통계 조회 성능 개선(MV)</div></div>
+        </div>
+        <p>1인 기획자로서 AI와의 페어프로그래밍만으로 설계 → 화면 구현 → 테스트 → 프로덕션 배포까지 완주했습니다. 문서를 "설계서 / 기능명세 / 작업분해 / 진행현황" 4단으로 분리한 덕분에, 여러 세션에 걸쳐 작업해도 "지금 뭘 왜 하는지"에 대한 컨텍스트가 유실되지 않았고, 검증 과정에서 발견한 버그(RLS GRANT 누락, 캐시 무효화 지연, 폼 select 리셋 등)도 원인과 함께 각 작업 항목에 기록해 재발을 방지했습니다. 성능도 "될 것 같다"에 기대지 않고 EXPLAIN ANALYZE·Redis 응답시간 실측으로 검증하는 습관을 지켰습니다.</p>
+        <p>1차 개발(인증, 지출 입력, 마스터데이터 관리, 예산, 대시보드 통계 6종, 캐싱, QA)은 완료해 프로덕션에 배포했고, 2차로 <b>관리비 명세서 OCR 자동 등록</b>과 <b>구독료·카드내역 서브앱 확장</b>을 기획 중입니다.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="prevnext">
+    <a href="#">← 이전 프로젝트</a>
+    <a href="#" class="mid">목록으로</a>
+    <a href="#">다음 프로젝트 →</a>
+  </div>
+</div>
+
+</body>
+</html>

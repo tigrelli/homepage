@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지출 관리 특화 가계부 · payLens | 포트폴리오 | 정태희</title>
+<meta name="description" content="1인 기획자 겸 PM으로 설계부터 배포까지 주도한 지출 관리 특화 가계부 서비스 'payLens' 프로젝트 상세입니다.">
+<meta property="og:title" content="지출 관리 특화 가계부 · payLens | 포트폴리오 | 정태희">
+<meta property="og:description" content="1인 기획자 겸 PM으로 설계부터 배포까지 주도한 지출 관리 특화 가계부 서비스 'payLens' 프로젝트 상세입니다.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/images/favicon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/images/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+  <div class="container">
+    <p class="detail-breadcrumb"><a href="../portfolio.html">포트폴리오</a> &gt; 가계부</p>
+
+    <section class="section detail-hero">
+      <p class="eyebrow">AI 개인 프로젝트</p>
+      <h1 class="page-title">지출 관리 특화 가계부</h1>
+      <p class="detail-tagline">payLens &mdash; &ldquo;지출을 4개 축으로 쪼개서 보면, 돈이 어디로 새는지 보인다&rdquo;</p>
+      <dl class="detail-meta-row">
+        <div><dt>기간</dt><dd>2026.06 &ndash; 2026.07 (1차 완료, 2차 기획 중)</dd></div>
+        <div><dt>역할</dt><dd>PM&middot;기획 (1인)</dd></div>
+        <div><dt>팀 구성</dt><dd>1인 + AI 페어프로그래밍(Claude Code)</dd></div>
+        <div><dt>기술</dt><dd>Next.js &middot; Supabase &middot; Tailwind &middot; Redis</dd></div>
+      </dl>
+      <div class="detail-links">
+        <a class="detail-link-btn" href="https://payfocus.vercel.app/" target="_blank" rel="noopener">서비스 바로가기 &rarr;</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">개요</h2>
+      <p class="about-body">기존 가계부 앱 대부분은 지출을 &ldquo;카테고리&rdquo; 한 축으로만 분류합니다. 그런데 실제로 &ldquo;이번 달에 왜 이렇게 썼지?&rdquo;를 알고 싶을 때 필요한 건 카테고리뿐 아니라 무엇으로 결제했는지, 어디서 썼는지, 구체적으로 뭘 샀는지까지입니다. payLens는 지출 1건을 아래 4개의 독립된 축으로 분해해 설계한 지출 관리 특화 가계부입니다.</p>
+      <div class="axis-grid">
+        <div class="axis-chip"><div class="axis-num">&#9312; HOW</div><div class="axis-name">지출분류</div><div class="axis-desc">결제수단 &mdash; 현금 / 계좌 / 카드(카드사별)</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9313; WHAT</div><div class="axis-name">지출항목</div><div class="axis-desc">카테고리 &mdash; 식료품, 의류, 보험 등</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9314; WHERE</div><div class="axis-name">지출처</div><div class="axis-desc">가맹점 &mdash; 이마트, 쿠팡 등</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9315; DETAIL</div><div class="axis-name">상세내용</div><div class="axis-desc">선택 &mdash; 품목 + 수량/단위, 자동 합산</div></div>
+      </div>
+      <p class="about-body" style="margin-top:20px;">PM(기획자) 1인이 Claude Code와의 페어프로그래밍으로 아키텍처 설계부터 DB 스키마, 화면 구현, 테스트, 프로덕션 배포까지 전 과정을 주도했습니다. 메인 가계부를 &ldquo;지출 데이터 허브&rdquo;로 두고, 이벤트(Webhook) 기반으로 관리비&middot;구독료&middot;카드내역 등 서브앱을 붙일 수 있는 확장형 구조로 설계했습니다.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">기획 (PRD&middot;IA)</h2>
+      <p class="about-body">기획 문서는 아키텍처 설계 &rarr; 기능명세(IA) &rarr; WBS(작업분해) &rarr; 진행현황 4단으로 분리해 관리했습니다. 계획 문서(WBS)는 진행 중 고치지 않고, 진행 상황만 별도 체크리스트 파일에 반영하는 방식으로 &ldquo;지금 계획이 뭐였는지&rdquo;와 &ldquo;지금 어디까지 됐는지&rdquo;가 섞이지 않게 했습니다 &mdash; AI와 여러 세션에 걸쳐 협업할 때 컨텍스트가 흐트러지지 않도록 하기 위한 장치였습니다.</p>
+      <ul class="plan-point-list">
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="account-book-architecture.html">가계부_아키텍처_설계.md </a>
+          <p class="about-body">전체 구조도(Mermaid), 지출 4축 데이터 모델, ERD, 로드맵 8장 구성.</p>
+        </li>
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="account-book-ia.html">기능명세서_IA.md &#8250;</a>
+          <p class="about-body">F-코드 기반 기능 명세 + 정보구조(IA), 실제 구현 완료 메뉴 표를 별도로 관리.</p>
+        </li>
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="account-book-wbs.html">WBS.md &#8250;</a>
+          <p class="about-body">TASK 단위 세션 추정 + PM 승인 후에만 체크되는 진행 체크리스트.</p>
+        </li>
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="account-book-progress.html">진행현황.md &#8250;</a>
+          <p class="about-body">WBS.md의 TASK 목록을 체크리스트로 옮긴 진행 현황 문서. TASK 완료 시 PM 확인 후 체크박스만 갱신.</p>
+        </li>
+      </ul>
+      <p class="doc-notice" style="margin-top:20px;">&#8251; 위 설계 문서들은 사후에 정리한 산출물이 아니라, Claude Code와 대화하며 프로젝트 설계를 진행한 원문 그대로입니다.</p>
+      <p class="plan-point-title" style="margin-top:24px;">정보구조(IA) &mdash; 전체 메뉴 트리</p>
+      <div class="ia-tree">
+payLens<br>
+&#9500;&#9472; 0. 인증 <span class="fade">&mdash; 회원가입 &middot; 로그인(이메일/구글) &middot; 계정 설정</span><br>
+&#9500;&#9472; 1. 대시보드 <span class="fade">&mdash; 개요 &middot; 항목별/지출분류별 통계 &middot; 지출처 Top10 &middot; 상세항목 Top10(드릴다운) &middot; 단가 분석</span><br>
+&#9500;&#9472; 2. 지출 입력/관리 <span class="fade">&mdash; 신규/수정 입력 &middot; 내역 리스트&middot;필터 &middot; 캘린더 조회(+빠른입력)</span><br>
+&#9500;&#9472; 3. 마스터 데이터 관리 <span class="fade">&mdash; 지출분류 &middot; 지출항목 &middot; 지출처 &middot; 품목 &middot; 단위</span><br>
+&#9500;&#9472; 4. 예산 관리 <span class="fade">&mdash; 전체예산 &rarr; 카테고리별 한도 &middot; 소진율 게이지</span><br>
+&#9500;&#9472; 5. 관리비 명세서 <span class="fade">&mdash; 2차, 기획 중 (사진 업로드 &rarr; OCR &rarr; 통계)</span><br>
+&#9492;&#9472; 6. 관리자 전용 <span class="fade">&mdash; 동의어 사전(SYNONYM_DICTIONARY) 관리</span>
+      </div>
+      <p class="about-body" style="margin-top:12px; font-size:0.8125rem;">&#8251; 위 트리는 최종 계획도이며, 실제 사이드바에는 지금까지 완성된 화면만 노출하도록 별도 표로 관리해 죽은 링크가 생기지 않게 했습니다.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">디자인</h2>
+      <p class="about-body">서비스 자체 BI(브랜드 아이덴티티)로 payLens를 별도로 정의했습니다. 컨셉은 &ldquo;Refined Navy with Gold Accent&rdquo; &mdash; 신뢰감 있는 네이비 베이스에 데이터 강조용 포인트 컬러를 얹는 방향입니다.</p>
+      <ul class="chip-row" style="margin-top:14px;">
+        <li class="chip">Focus</li>
+        <li class="chip">Clarity</li>
+        <li class="chip">Growth</li>
+        <li class="chip">Insight</li>
+      </ul>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-color" style="background:#0B2545;"></div><div class="swatch-info"><div class="swatch-name">Deep Navy</div><div class="swatch-hex">#0B2545 &middot; 메인/헤더</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#0D9488;"></div><div class="swatch-info"><div class="swatch-name">Action Teal</div><div class="swatch-hex">#0D9488 &middot; CTA/링크</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#EE6C4D;"></div><div class="swatch-info"><div class="swatch-name">Data Accent</div><div class="swatch-hex">#EE6C4D &middot; 지출 경고</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#FB8C00;"></div><div class="swatch-info"><div class="swatch-name">Credit Orange</div><div class="swatch-hex">#FB8C00 &middot; 신용카드 태그</div></div></div>
+      </div>
+      <p class="about-body" style="margin-top:16px;">결제수단 태그는 현금(<span style="color:#43A047;font-weight:700;">Green</span>) &middot; 체크카드(<span style="color:#1E88E5;font-weight:700;">Blue</span>) &middot; 신용카드(<span style="color:#FB8C00;font-weight:700;">Orange</span>) 3색으로 명확히 구분했고, 오렌지 계열은 &ldquo;데이터 강조 전용&rdquo;, 틸 컬러는 &ldquo;클릭 가능한 액션 전용&rdquo;으로 역할을 분리해 두 의미가 섞이지 않도록 규칙을 문서화했습니다. 폰트는 본문 Pretendard, 통계 수치는 JetBrains Mono로 자릿수를 맞췄습니다.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">개발</h2>
+      <div class="portfolio-tag-row">
+        <span class="portfolio-tag">Next.js (App Router)</span>
+        <span class="portfolio-tag">TypeScript</span>
+        <span class="portfolio-tag">Tailwind CSS</span>
+        <span class="portfolio-tag">shadcn/ui</span>
+        <span class="portfolio-tag">pnpm + Turborepo</span>
+        <span class="portfolio-tag">Supabase (Postgres/Auth/RLS)</span>
+        <span class="portfolio-tag">Upstash Redis</span>
+        <span class="portfolio-tag">Recharts</span>
+        <span class="portfolio-tag">Vitest</span>
+        <span class="portfolio-tag">Playwright</span>
+        <span class="portfolio-tag">GitHub Actions</span>
+        <span class="portfolio-tag">Vercel</span>
+      </div>
+      <ul class="feature-list">
+        <li><strong>모노레포 구조</strong> &mdash; pnpm workspace + Turborepo로 packages/ui&middot;types&middot;utils&middot;supabase-client 등 공통 코드를 분리해 향후 서브앱(관리비/구독/카드내역) 확장을 고려한 구조로 설계.</li>
+        <li><strong>통계 성능 최적화</strong> &mdash; Materialized View(지출분류/품목/단가별 집계) + Redis 캐시로 대시보드 통계를 서빙, 원본 JOIN 대비 최대 6배 빠른 조회 성능을 실측(EXPLAIN ANALYZE)으로 검증.</li>
+        <li><strong>DB 보안</strong> &mdash; 8개 핵심 테이블 전체에 RLS(Row Level Security) 적용, 9개 테이블 대상으로 타 사용자 데이터 접근 차단을 REST API 레벨에서 직접 검증하는 별도 보안 테스트 작성.</li>
+        <li><strong>입력 UX</strong> &mdash; 자유 텍스트로 입력한 수량/단위를 자동 구조화(예: &ldquo;1개&rdquo; &rarr; 수량 1&middot;단위 개), 편집거리(Levenshtein) 기반 유사 품목 제안, 지출처&middot;품목 자동완성(find-or-create) 구현.</li>
+        <li><strong>CI/CD</strong> &mdash; GitHub Actions로 lint/typecheck/test/build 자동화, main 브랜치 push 시 Supabase 마이그레이션 자동 배포, Vercel로 프론트 배포.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">스크린샷</h2>
+      <div class="detail-gallery">
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/account-book-dashboard.webp" alt="홈 대시보드 화면 — 이번 달 지출 요약, 최근 6개월 지출 추이, 카테고리별·지출분류별 지출, 지출처·상세항목 Top 10">
+          <figcaption>홈 대시보드</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/account-book-calendar.webp" alt="지출 내역 캘린더 화면 — 날짜별 지출 내역 카드 목록">
+          <figcaption>지출 내역 &middot; 캘린더 조회</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/account-book-budget-mgmt.webp" alt="예산 관리 화면 — 전체 예산 등록 후 카테고리별 한도 배분과 소진율 게이지">
+          <figcaption>예산 관리</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/account-book-statement-history.webp" alt="관리비 명세서 이력 화면 — 월별 관리비 명세서를 원본 내역으로 비교 확인">
+          <figcaption>관리비 명세서 이력</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">결과&middot;회고</h2>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num">90/90</div><div class="stat-label">단위 테스트 통과</div></div>
+        <div class="stat-card"><div class="stat-num">46/46</div><div class="stat-label">E2E 테스트 통과</div></div>
+        <div class="stat-card"><div class="stat-num">최대 6배</div><div class="stat-label">통계 조회 성능 개선(MV)</div></div>
+      </div>
+      <p class="about-body">1인 기획자로서 AI와의 페어프로그래밍만으로 설계 &rarr; 화면 구현 &rarr; 테스트 &rarr; 프로덕션 배포까지 완주했습니다. 문서를 &ldquo;설계서 / 기능명세 / 작업분해 / 진행현황&rdquo; 4단으로 분리한 덕분에, 여러 세션에 걸쳐 작업해도 &ldquo;지금 뭘 왜 하는지&rdquo;에 대한 컨텍스트가 유실되지 않았고, 검증 과정에서 발견한 버그(RLS GRANT 누락, 캐시 무효화 지연, 폼 select 리셋 등)도 원인과 함께 각 작업 항목에 기록해 재발을 방지했습니다. 성능도 &ldquo;될 것 같다&rdquo;에 기대지 않고 EXPLAIN ANALYZE&middot;Redis 응답시간 실측으로 검증하는 습관을 지켰습니다.</p>
+      <p class="about-body">1차 개발(인증, 지출 입력, 마스터데이터 관리, 예산, 대시보드 통계 6종, 캐싱, QA)은 완료해 프로덕션에 배포했고, 2차로 관리비 명세서 OCR 자동 등록과 구독료&middot;카드내역 서브앱 확장을 기획 중입니다.</p>
+    </section>
+
+    <div id="detail-prevnext"></div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="../assets/js/layout.js" defer></script>
+<script src="../assets/js/portfolio-nav.js" defer></script>
+</body>
+</html>

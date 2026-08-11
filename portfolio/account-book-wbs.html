@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WBS.md · 지출 관리 특화 가계부 | 정태희</title>
+<meta name="description" content="지출 관리 특화 가계부(payLens) 프로젝트의 WBS(작업분해구조) 문서 전문입니다.">
+<meta property="og:title" content="WBS.md · 지출 관리 특화 가계부 | 정태희">
+<meta property="og:description" content="지출 관리 특화 가계부(payLens) 프로젝트의 WBS(작업분해구조) 문서 전문입니다.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/images/favicon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/images/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+  <div class="container">
+    <p class="detail-breadcrumb"><a href="../portfolio.html">포트폴리오</a> &gt; <a href="account-book.html">지출 관리 특화 가계부</a> &gt; WBS.md</p>
+
+    <section class="section detail-hero">
+      <p class="eyebrow">기획 문서 원문</p>
+      <h1 class="page-title">WBS.md</h1>
+      <p class="about-lead">&larr; <a href="account-book.html">지출 관리 특화 가계부 프로젝트로 돌아가기</a></p>
+    </section>
+
+    <section class="section">
+      <p class="doc-notice">&#8251; 이 설계 문서는 사후에 정리한 산출물이 아니라, Claude Code와 대화하며 프로젝트 설계를 진행한 원문 그대로입니다.</p>
+      <div class="markdown-content">
+<blockquote>
+<p>⚠️ <strong>[2026-07-10] 이 문서는 더 이상 갱신되지 않습니다.</strong> 1차 개발 완료 처리에 따라 이 파일은 <code>docs/1차/WBS.md</code>로 정리·이관되었습니다(2차 이관 표시 포함). 2차 개발 관련 내용은 <code>docs/2차/인수인계.md</code> 참고. 아래는 원본 그대로 보존된 내용입니다.</p>
+<p>기준 문서: <code>가계부_아키텍처_설계.md</code>, <code>기능명세서_IA.md</code><br />
+작업 코드 체계: <strong><code>S-</code></strong> = 시스템 구현(인프라/DB/배포 등, 사용자 화면 없음), <strong><code>F-</code></strong> = 앱 기능(화면/사용자 동작) — <code>기능명세서_IA.md</code>의 F-코드와 동일<br />
+개발 방식: PM 1인, Claude(Pro 플랜)와 바이브 코딩 — Claude Code 터미널 + claude.ai 채팅 병행</p>
+</blockquote>
+<hr />
+<h2>0. 일정 추정 전제 (Claude Pro 사용량 기준)</h2>
+<p>Anthropic은 2026년 5월부터 Pro/Max 플랜의 사용량을 <strong>고정 메시지/토큰 수치로 공개하지 않고</strong>, "5시간 롤링 윈도우 + 주간 캡, 토큰 기반 측정"으로만 안내합니다. 또한 <strong>claude.ai 채팅과 Claude Code 사용량은 같은 풀(pool)을 공유</strong>합니다. 따라서 이 WBS는 정확한 토큰 수 대신 다음 가정으로 일정을 추정합니다.</p>
+<table>
+<thead>
+<tr>
+<th>가정 항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>작업 단위</td>
+<td>1세션 = Claude Pro의 5시간 롤링 윈도우 1회</td>
+</tr>
+<tr>
+<td>1세션당 처리량(경험적 추정)</td>
+<td><strong>소규모 TASK 1~2개</strong> (예: 테이블 마이그레이션 1개 + RLS 정책, 또는 CRUD 화면 1개 + 기본 테스트) — TASK를 잘게 쪼갠 이유가 여기에 있음 (세션 안에 끝낼 수 있는 크기로 분해)</td>
+</tr>
+<tr>
+<td>1일 가용 세션</td>
+<td>Pro 플랜은 보통 <strong>1일 1~2세션</strong> 정도가 안정적 (그 이상은 주간 캡에 걸릴 가능성, 실제론 작업 복잡도/모델 선택에 따라 유동적)</td>
+</tr>
+<tr>
+<td>권장 운영</td>
+<td><code>/usage</code> 명령으로 잔여량 수시 확인 → 세션 캡에 자주 걸리면 <strong>Max 5x로 업그레이드 고려</strong> (난이도 높은 TASK는 Opus, 단순 반복 작업은 Sonnet/Haiku로 모델을 나눠 쓰면 같은 풀 안에서 처리량 향상 가능)</td>
+</tr>
+<tr>
+<td>TASK 크기 기준</td>
+<td>모든 TASK는 <strong>"한 세션 안에 끝낼 수 있는 단위"</strong>(약 0.5~1세션)로 분해. 그보다 크면 하위 TASK로 추가 분할</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 위 "1세션당 처리량"은 공개된 고정 수치가 아니라 <strong>소규모 개인 프로젝트 바이브 코딩 기준의 경험적 추정치</strong>입니다. 실제 진행하면서 본인의 <code>/usage</code> 소진 속도를 1주일 정도 관찰한 뒤, 아래 일정의 세션 수를 보정하는 것을 권장합니다.</p>
+</blockquote>
+<p><strong>일정 환산</strong>: <code>예상 세션 수 ÷ 1일 가용 세션(1~1.5) = 예상 소요일</code> (주말 제외, 매일 작업 가정)</p>
+<hr />
+<h2>1. Phase 구성 (아키텍처 7장 로드맵과 매칭)</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>아키텍처 로드맵 단계</th>
+<th>범위</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase 0</td>
+<td>(사전)</td>
+<td>프로젝트/저장소/Supabase 초기 셋업</td>
+</tr>
+<tr>
+<td>Phase 1</td>
+<td>1단계</td>
+<td>메인앱 Core + 인증 + 수동 입력 가계부 + 기본 대시보드</td>
+</tr>
+<tr>
+<td>Phase 2</td>
+<td>2단계</td>
+<td>서브앱 1개(관리비) Webhook 연동</td>
+</tr>
+<tr>
+<td>Phase 3</td>
+<td>3단계</td>
+<td>통계 분리/캐시/대시보드 고도화</td>
+</tr>
+<tr>
+<td>Phase 4</td>
+<td>4단계</td>
+<td>서브앱 확장(구독/카드), 계정연결 정식화</td>
+</tr>
+<tr>
+<td>Phase 5</td>
+<td>(사전 출시)</td>
+<td>통합 테스트 / QA / 출시</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. Phase 0 — 사전 셋업 (시스템, 아키텍처 2장/8장)</h2>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>설계서 참조</th>
+<th>선행작업</th>
+<th>세션(추정)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-0-1</td>
+<td>시스템</td>
+<td>GitHub 저장소 생성 + 브랜치 전략 설정(main/develop)</td>
+<td>8-2</td>
+<td>-</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-2</td>
+<td>시스템</td>
+<td>pnpm workspace + Turborepo 모노레포 스캐폴딩</td>
+<td>2</td>
+<td>S-0-1</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-0-3</td>
+<td>시스템</td>
+<td><code>apps/main/web</code> Next.js(App Router) 프로젝트 생성</td>
+<td>2, 6</td>
+<td>S-0-2</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-4</td>
+<td>시스템</td>
+<td>Tailwind + shadcn/ui 셋업</td>
+<td>8-1</td>
+<td>S-0-3</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-5</td>
+<td>시스템</td>
+<td><code>packages/ui</code>, <code>packages/types</code>, <code>packages/utils</code>, <code>packages/config</code> 패키지 골격 생성</td>
+<td>2</td>
+<td>S-0-2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-0-6</td>
+<td>시스템</td>
+<td>Supabase 프로젝트 생성 (Cloud)</td>
+<td>8-1</td>
+<td>-</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>S-0-7</td>
+<td>시스템</td>
+<td>Supabase CLI 로컬 설치 + <code>supabase init</code> + <code>supabase/</code> 폴더 구성</td>
+<td>2, 8-1</td>
+<td>S-0-6, S-0-25</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-8</td>
+<td>시스템</td>
+<td>Supabase ↔ GitHub 연동(Working directory 지정, Preview Branch 옵션 활성화)</td>
+<td>8-2</td>
+<td>S-0-1, S-0-7</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-9</td>
+<td>시스템</td>
+<td><code>packages/supabase-client</code> 패키지 작성 (브라우저/서버 클라이언트 초기화)</td>
+<td>2</td>
+<td>S-0-5, S-0-6</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-0-10</td>
+<td>시스템</td>
+<td>GitHub Actions <code>ci.yml</code> (lint/typecheck/test/build) 작성</td>
+<td>8-3</td>
+<td>S-0-2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-0-11</td>
+<td>시스템</td>
+<td>GitHub Actions <code>deploy-migrations.yml</code> 작성 (main push → <code>supabase db push</code>)</td>
+<td>8-3</td>
+<td>S-0-7, S-0-8</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-0-12</td>
+<td>시스템</td>
+<td>프론트 배포 방식 결정 및 연동 (Vercel GitHub 연동 또는 8-3-1의 B~D 중 선택)</td>
+<td>8-3-1</td>
+<td>S-0-3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-0-13</td>
+<td>시스템</td>
+<td>시크릿 등록 (<code>SUPABASE_ACCESS_TOKEN</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code> 등 GitHub Secrets)</td>
+<td>8-3</td>
+<td>S-0-8</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>S-0-14</td>
+<td>시스템</td>
+<td>ESLint + Prettier 공유 설정 (<code>packages/config</code>) 작성 및 각 앱에 연결</td>
+<td>2, 8-1</td>
+<td>S-0-5</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-0-15</td>
+<td>시스템</td>
+<td>Husky + lint-staged 설정 (pre-commit: lint/format, pre-push: typecheck)</td>
+<td>8-3</td>
+<td>S-0-14</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-16</td>
+<td>시스템</td>
+<td><code>.gitignore</code> + 환경변수 관리 체계 (<code>.env.example</code>, local/CI/production 분리 규칙 문서화)</td>
+<td>8-1</td>
+<td>S-0-3, S-0-6</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-17</td>
+<td>시스템</td>
+<td><code>README.md</code> 작성 (프로젝트 개요, 로컬 실행법, 디렉토리 설명)</td>
+<td>-</td>
+<td>S-0-2</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-18</td>
+<td>시스템</td>
+<td>루트 <code>tsconfig.json</code> + path alias 설정, 각 패키지 tsconfig 상속 구조</td>
+<td>2</td>
+<td>S-0-5</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-0-19</td>
+<td>시스템</td>
+<td>Node/pnpm 버전 고정 (<code>.nvmrc</code>, <code>package.json</code>의 <code>packageManager</code>/<code>engines</code>)</td>
+<td>2</td>
+<td>S-0-2</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>S-0-20</td>
+<td>시스템</td>
+<td><code>turbo.json</code> 파이프라인 정의 (build/lint/test/dev 태스크 의존관계+캐싱)</td>
+<td>2</td>
+<td>S-0-2, S-0-14</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-0-21</td>
+<td>시스템</td>
+<td>테스트 프레임워크 설치/설정 — 단위테스트(Vitest) + E2E(Playwright) 골격, <code>pnpm test</code>/<code>pnpm test:e2e</code> 스크립트</td>
+<td>8-1</td>
+<td>S-0-3, S-0-5</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>S-0-22</td>
+<td>시스템</td>
+<td>commitlint 설정 (Husky <code>commit-msg</code> 훅과 연계, <code>[TASK-ID] ...</code> 형식 강제)</td>
+<td>8-3</td>
+<td>S-0-15</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-0-23</td>
+<td>시스템</td>
+<td>GitHub 브랜치 보호 규칙 (main: PR 필수 + CI status check 통과 필수, 직접 push 금지)</td>
+<td>8-2</td>
+<td>S-0-1, S-0-10</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>S-0-24</td>
+<td>시스템</td>
+<td>VS Code 워크스페이스 권장 설정 (<code>.vscode/settings.json</code>, <code>extensions.json</code>) — 선택</td>
+<td>-</td>
+<td>S-0-3</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>S-0-25</td>
+<td>시스템</td>
+<td>Docker 설치/실행 확인 (Supabase CLI 로컬 개발에 필수 — <code>supabase start</code>가 Docker 의존)</td>
+<td>8-1</td>
+<td>-</td>
+<td>0.1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase 0 소계: 약 8.1세션</strong></p>
+<hr />
+<h2>3. Phase 1 — 메인앱 Core (1단계)</h2>
+<h3>3-1. 시스템: 데이터베이스 구현 (아키텍처 4장 ERD)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>설계서 참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-1-1</td>
+<td>시스템</td>
+<td><code>CATEGORY</code> 테이블 마이그레이션 + 시스템 기본 카테고리 시드 데이터(seed.sql, <code>데이터정책_및_시드정의서</code> 1-1 참조)</td>
+<td>4</td>
+<td>S-0-7</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-1-2</td>
+<td>시스템</td>
+<td><code>PAYMENT_METHOD</code> 테이블 마이그레이션 + 현금(고정) 시드 (<code>데이터정책_및_시드정의서</code> 1-2 참조)</td>
+<td>4</td>
+<td>S-0-7</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-1-3</td>
+<td>시스템</td>
+<td><code>VENDOR</code> 테이블 마이그레이션</td>
+<td>4</td>
+<td>S-0-7</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-1-4</td>
+<td>시스템</td>
+<td><code>ITEM</code> 테이블 마이그레이션 (aliases, merged_into_item_id 포함)</td>
+<td>4</td>
+<td>S-0-7</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-1-5</td>
+<td>시스템</td>
+<td><code>UNIT</code> 테이블 마이그레이션 + 시스템 기본 단위 시드 (<code>데이터정책_및_시드정의서</code> 1-3 참조)</td>
+<td>4</td>
+<td>S-0-7</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-1-6</td>
+<td>시스템</td>
+<td><code>TRANSACTION</code> 테이블 마이그레이션</td>
+<td>4</td>
+<td>S-1-1~S-1-5</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-1-7</td>
+<td>시스템</td>
+<td><code>TRANSACTION_DETAIL</code> 테이블 마이그레이션</td>
+<td>4</td>
+<td>S-1-6, S-1-4, S-1-5</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-1-8</td>
+<td>시스템</td>
+<td><code>BUDGET</code> 테이블 마이그레이션</td>
+<td>4</td>
+<td>S-1-1</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-1-9</td>
+<td>시스템</td>
+<td>전체 테이블 RLS 정책 작성 (<code>데이터정책_및_시드정의서</code> 3장 표 그대로 구현)</td>
+<td>3, 4</td>
+<td>S-1-1~S-1-8</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>S-1-10</td>
+<td>시스템</td>
+<td>Postgres 함수/트리거: <code>TRANSACTION.amount</code> 자동계산(상세 합계)</td>
+<td>1-1③</td>
+<td>S-1-7</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>S-1-11</td>
+<td>시스템</td>
+<td><code>supabase gen types typescript</code> 연동 + <code>packages/types/database.generated.ts</code> 생성 확인</td>
+<td>8-3</td>
+<td>S-1-1~S-1-8</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 4.8세션</p>
+<h3>3-2. 시스템: 인증 (아키텍처 3장)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-1-12</td>
+<td>시스템</td>
+<td>Supabase Auth 이메일 로그인 활성화 + 설정</td>
+<td>3</td>
+<td>S-0-6</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-1-13</td>
+<td>시스템</td>
+<td>소셜 로그인(OAuth Provider) 설정 (선택)</td>
+<td>3</td>
+<td>S-1-12</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-1-14</td>
+<td>시스템</td>
+<td>인증 미들웨어(Next.js middleware, 세션 검증) 구현</td>
+<td>3</td>
+<td>S-0-9, S-1-12</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<h3>3-3. 앱 기능: 인증 화면 (F-3)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-3-1</td>
+<td>앱기능</td>
+<td>회원가입 화면/폼</td>
+<td>F-3-1</td>
+<td>S-1-12</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-3-2</td>
+<td>앱기능</td>
+<td>로그인 화면/폼</td>
+<td>F-3-2</td>
+<td>S-1-12</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-1-3-3</td>
+<td>앱기능</td>
+<td>로그아웃/세션 만료 처리</td>
+<td>F-3-3</td>
+<td>S-1-14</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>F-1-3-4</td>
+<td>앱기능</td>
+<td>계정 설정 화면</td>
+<td>F-3-4</td>
+<td>F-1-3-2</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>T-1-3-1</td>
+<td>테스트</td>
+<td>인증 단위/통합 테스트 (가입→로그인→로그아웃)</td>
+<td>F-3-x</td>
+<td>F-1-3-1~3</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 3.3세션</p>
+<h3>3-4. 앱 기능: 마스터 데이터 관리 (F-1-1-1~3, 1-1-13 일부)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-4-1</td>
+<td>앱기능</td>
+<td>지출분류 관리 화면 (현금 표시 + 카드 등록/수정/삭제)</td>
+<td>F-1-1-1</td>
+<td>S-1-2, S-1-9</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-1-4-2</td>
+<td>앱기능</td>
+<td>지출항목 관리 화면 (CRUD, 단일 항목)</td>
+<td>F-1-1-2</td>
+<td>S-1-1, S-1-9</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-1-4-3</td>
+<td>앱기능</td>
+<td>지출처 관리 화면 (CRUD)</td>
+<td>F-1-1-3</td>
+<td>S-1-3, S-1-9</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>T-1-4-1</td>
+<td>테스트</td>
+<td>마스터 데이터 CRUD 단위 테스트</td>
+<td>F-1-1-1~3</td>
+<td>F-1-4-1~3</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 2.4세션</p>
+<h3>3-5. 앱 기능: 지출 입력 (F-1-1-4~10) — 가장 복잡한 영역, 세분화 필수</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-5-1</td>
+<td>앱기능</td>
+<td>지출 입력 폼 기본 골격 (지출분류/지출항목/지출처 선택 UI)</td>
+<td>F-1-1-4</td>
+<td>F-1-4-1~3</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-1-5-2</td>
+<td>앱기능</td>
+<td>지출처 자동완성(검색) 컴포넌트</td>
+<td>F-1-1-3</td>
+<td>F-1-5-1</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-1-5-3</td>
+<td>앱기능</td>
+<td>금액 직접입력 모드(상세 미사용) 저장 로직</td>
+<td>F-1-1-4</td>
+<td>F-1-5-1</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-1-5-4</td>
+<td>앱기능</td>
+<td>상세항목 추가 UI(동적 행 추가/삭제)</td>
+<td>F-1-1-5</td>
+<td>F-1-5-1</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-1-5-5</td>
+<td>앱기능</td>
+<td>상세항목 자동완성(Item 검색) 컴포넌트</td>
+<td>F-1-1-6</td>
+<td>F-1-5-4, S-1-4</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-1-5-6</td>
+<td>앱기능</td>
+<td>신규 Item 생성 플로우(자동완성 없을 때)</td>
+<td>F-1-1-6</td>
+<td>F-1-5-5</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-1-5-7</td>
+<td>앱기능</td>
+<td>유사 항목 제안 팝업 (편집거리 기반, 동의어 사전 연동)</td>
+<td>F-1-1-7</td>
+<td>F-1-5-5</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-1-5-8</td>
+<td>앱기능</td>
+<td>수량/단위 입력 필드 + 파싱(숫자+단위 분리) 로직</td>
+<td>F-1-1-9</td>
+<td>F-1-5-4</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-1-5-9</td>
+<td>앱기능</td>
+<td>단위 자동완성/신규 단위 등록 제안</td>
+<td>F-1-1-10</td>
+<td>F-1-5-8, S-1-5</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-5-10</td>
+<td>앱기능</td>
+<td>상세 금액 합계 → Transaction.amount 자동표시(읽기전용) UI 연동</td>
+<td>F-1-1-5</td>
+<td>F-1-5-4, S-1-10</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-1-5-11</td>
+<td>앱기능</td>
+<td>지출 저장(API 연동, 검증)</td>
+<td>F-1-1-4~5</td>
+<td>F-1-5-3, F-1-5-10</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-5-12</td>
+<td>앱기능</td>
+<td>지출 내역 리스트 화면 (페이지네이션)</td>
+<td>F-1-1-11</td>
+<td>F-1-5-11</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-1-5-13</td>
+<td>앱기능</td>
+<td>지출 내역 필터(기간/분류/카테고리/지출처)</td>
+<td>F-1-1-11</td>
+<td>F-1-5-12</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-5-14</td>
+<td>앱기능</td>
+<td>지출 수정/삭제 화면</td>
+<td>F-1-1-12</td>
+<td>F-1-5-11</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>T-1-5-1</td>
+<td>테스트</td>
+<td>지출 입력 단위테스트(금액 자동계산 검증 포함)</td>
+<td>F-1-1-4~10</td>
+<td>F-1-5-11</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>T-1-5-2</td>
+<td>테스트</td>
+<td>지출 입력 E2E 테스트(직접입력/상세입력 두 경로)</td>
+<td>F-1-1-4~5</td>
+<td>F-1-5-14</td>
+<td>0.6</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 8.0세션 — <strong>가장 큰 블록. 일정 지연 시 우선 모니터링 대상</strong></p>
+<h3>3-6. 앱 기능: 품목/단위 관리 화면 (F-1-1-8)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-6-1</td>
+<td>앱기능</td>
+<td>품목(Item) 목록 화면</td>
+<td>F-1-1-8</td>
+<td>S-1-4</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-6-2</td>
+<td>앱기능</td>
+<td>품목 별칭 추가/수정 UI</td>
+<td>F-1-1-8</td>
+<td>F-1-6-1</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-1-6-3</td>
+<td>앱기능</td>
+<td>품목 수동 병합(merge) UI + 과거 집계 재계산 트리거</td>
+<td>F-1-1-8</td>
+<td>F-1-6-1</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>T-1-6-1</td>
+<td>테스트</td>
+<td>병합 로직 단위테스트(merged_into_item_id 그룹화 검증)</td>
+<td>F-1-1-8</td>
+<td>F-1-6-3</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 1.9세션</p>
+<h3>3-7. 앱 기능: 예산 (F-4)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-7-1</td>
+<td>앱기능</td>
+<td>예산 설정 화면(전체 예산 우선 등록 → 카테고리별 월 한도 배분, 2026-07-03 정정 — <code>BUDGET_TOTAL</code> 테이블 신설)</td>
+<td>F-4-1</td>
+<td>S-1-8, F-1-4-2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-7-2</td>
+<td>앱기능</td>
+<td>예산 소진율 게이지 컴포넌트</td>
+<td>F-4-2</td>
+<td>F-1-7-1</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 0.9세션</p>
+<h3>3-8. 앱 기능: 대시보드 1차 (F-5-1~3, MV 없이 단순 쿼리)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-1-15</td>
+<td>시스템</td>
+<td>대시보드용 단순 집계 쿼리/뷰 작성 (1단계는 MV 없이 직접 쿼리)</td>
+<td>5</td>
+<td>S-1-6, S-1-7</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-8-1</td>
+<td>앱기능</td>
+<td>대시보드 개요 화면(요약 카드)</td>
+<td>F-5-1</td>
+<td>S-1-15</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-8-2</td>
+<td>앱기능</td>
+<td>월별 추이 차트</td>
+<td>F-5-2</td>
+<td>S-1-15</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-1-8-3</td>
+<td>앱기능</td>
+<td>항목별(카테고리) 도넛/트리맵 차트</td>
+<td>F-5-3</td>
+<td>S-1-15</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>T-1-8-1</td>
+<td>테스트</td>
+<td>대시보드 화면 E2E (데이터 입력 후 반영 확인)</td>
+<td>F-5-1~3</td>
+<td>F-1-8-1~3</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 2.5세션</p>
+<h3>3-9. 반응형 대응 (cross-cutting, 아키텍처 6장)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-9-1</td>
+<td>앱기능</td>
+<td>전체 화면 반응형 점검/보정 (모바일 1열, 데스크탑 다열)</td>
+<td>6</td>
+<td>Phase 1 모든 화면 완료</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>F-1-9-2</td>
+<td>앱기능</td>
+<td>PWA 매니페스트 적용</td>
+<td>6</td>
+<td>F-1-9-1</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 1.1세션</p>
+<h3>3-10. 앱 기능: 지출 내역 캘린더 뷰 (2026-07-04 백로그 B-7 채택, Phase 1 완료 후 추가)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-1-10-1</td>
+<td>앱기능</td>
+<td>지출 내역 캘린더 조회 화면 (월별 그리드, 일자별 지출 카드 나열)</td>
+<td>F-1-1-14</td>
+<td>F-1-5-12</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-1-10-2</td>
+<td>앱기능</td>
+<td>날짜별 빠른 지출 입력 레이어 팝업 ("+" 트리거, 저장 즉시 캘린더 반영)</td>
+<td>F-1-1-14</td>
+<td>F-1-10-1</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>T-1-10-1</td>
+<td>테스트</td>
+<td>캘린더 조회 + 빠른입력 E2E (월 이동, 일자별 표시, 팝업 저장 후 반영 확인)</td>
+<td>-</td>
+<td>F-1-10-1~2</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 1.8세션</p>
+<p><strong>Phase 1 총합: 약 27.5세션 → 1일 1.2세션 가정 시 약 23일(영업일 기준, 주말 제외 시 약 4.7주)</strong></p>
+<hr />
+<h2>4. Phase 2 — 서브앱(관리비) Webhook 연동 (2단계)</h2>
+<h3>4-1. 시스템: Webhook 수신 인프라</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-2-1</td>
+<td>시스템</td>
+<td><code>packages/event-contracts</code> 패키지 + zod 스키마 작성</td>
+<td>2</td>
+<td>S-0-5</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-2-2</td>
+<td>시스템</td>
+<td><code>supabase/functions/subapp-webhook-receiver</code> Edge Function 골격</td>
+<td>2, 8-1</td>
+<td>S-0-7, S-2-1</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-2-3</td>
+<td>시스템</td>
+<td>Webhook 서명 검증 로직(서비스 토큰/API 키)</td>
+<td>3</td>
+<td>S-2-2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-2-4</td>
+<td>시스템</td>
+<td>멱등성 체크(<code>external_id</code>+<code>source_app</code> 유니크) 로직</td>
+<td>4</td>
+<td>S-2-2, S-1-6</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-2-5</td>
+<td>시스템</td>
+<td>Webhook → <code>TRANSACTION</code>+<code>TRANSACTION_DETAIL</code> insert 로직 (input_type=SUBAPP)</td>
+<td>1-1③, 4</td>
+<td>S-2-4</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>S-2-6</td>
+<td>시스템</td>
+<td>GitHub Actions <code>deploy-functions.yml</code> (Edge Functions 배포)</td>
+<td>8-3</td>
+<td>S-2-2</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>T-2-1</td>
+<td>테스트</td>
+<td>Webhook 수신 통합테스트(정상/중복/위조 서명 케이스)</td>
+<td>-</td>
+<td>S-2-5</td>
+<td>0.6</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 3.5세션</p>
+<h3>4-2. 시스템: 계정 연결/항목 매핑 데이터 구조</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-2-7</td>
+<td>시스템</td>
+<td><code>SUB_APP</code> 테이블 마이그레이션</td>
+<td>4</td>
+<td>S-0-7</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>S-2-8</td>
+<td>시스템</td>
+<td><code>ACCOUNT_LINK</code> 테이블 마이그레이션 + RLS</td>
+<td>3, 4</td>
+<td>S-2-7</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-2-9</td>
+<td>시스템</td>
+<td><code>SUB_APP_ITEM_MAP</code> 테이블 마이그레이션</td>
+<td>4</td>
+<td>S-2-7, S-1-1, S-1-3</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 1.1세션</p>
+<h3>4-3. 앱 기능: 서브앱 연동 화면 (F-1-2)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F-코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-2-1-1</td>
+<td>앱기능</td>
+<td>서브앱 목록/소개 화면</td>
+<td>F-1-2-1</td>
+<td>S-2-7</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-2-1-2</td>
+<td>앱기능</td>
+<td>계정 연결(Account Link) 플로우 화면</td>
+<td>F-1-2-2</td>
+<td>S-2-8</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-2-1-3</td>
+<td>앱기능</td>
+<td>항목 매핑 설정 화면</td>
+<td>F-1-2-3</td>
+<td>S-2-9</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-2-1-4</td>
+<td>앱기능</td>
+<td>연동 내역 확인 화면(원본보기, raw_payload)</td>
+<td>F-1-2-4</td>
+<td>S-2-5</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-2-1-5</td>
+<td>앱기능</td>
+<td>연동 해제 기능</td>
+<td>F-1-2-5</td>
+<td>F-2-1-2</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>T-2-2</td>
+<td>테스트</td>
+<td>계정연결~매핑~Webhook수신 E2E 테스트</td>
+<td>F-1-2-x</td>
+<td>F-2-1-1~4</td>
+<td>0.7</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 3.2세션</p>
+<h3>4-4. 관리비 서브앱 (별도 작업물, 최소 구현)</h3>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-2-10</td>
+<td>시스템</td>
+<td><code>apps/sub-apps/utility-bill</code> 프로젝트 골격</td>
+<td>2</td>
+<td>S-0-2</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>F-2-2-1</td>
+<td>앱기능</td>
+<td>관리비 명세 입력 화면(수동 입력 MVP, OCR은 후순위)</td>
+<td>-</td>
+<td>S-2-10</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>S-2-11</td>
+<td>시스템</td>
+<td>관리비 → 메인앱 Webhook 발행 로직(publisher)</td>
+<td>2</td>
+<td>S-2-1, F-2-2-1</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>T-2-3</td>
+<td>테스트</td>
+<td>관리비 입력→Webhook 발행→메인 반영 통합테스트</td>
+<td>-</td>
+<td>S-2-11</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>소계: 약 2.0세션</p>
+<p><strong>Phase 2 총합: 약 9.8세션 → 약 8~9일</strong></p>
+<hr />
+<h2>5. Phase 3 — 통계 분리/캐시/대시보드 고도화 (3단계)</h2>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>F/참조 코드</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-3-1</td>
+<td>시스템</td>
+<td><code>tx_stats</code> Materialized View 작성</td>
+<td>5</td>
+<td>S-1-6</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-3-2</td>
+<td>시스템</td>
+<td><code>item_stats</code> Materialized View 작성</td>
+<td>5</td>
+<td>S-1-7</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-3-3</td>
+<td>시스템</td>
+<td><code>item_unit_stats</code> Materialized View 작성 (quantity_value/unit_id 필터)</td>
+<td>5</td>
+<td>S-1-7, S-1-5</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>S-3-4</td>
+<td>시스템</td>
+<td>MV 리프레시 트리거/스케줄(Edge Function 또는 트리거)</td>
+<td>5</td>
+<td>S-3-1~3</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>S-3-5</td>
+<td>시스템</td>
+<td>Upstash Redis 연동 (캐시 레이어)</td>
+<td>8-1</td>
+<td>S-0-9</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-3-6</td>
+<td>시스템</td>
+<td>Top10/통계 API 캐시 적용 (<code>item_top10:{userId}:{period}</code> 등 키 설계)</td>
+<td>5</td>
+<td>S-3-2, S-3-5</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>F-3-1-1</td>
+<td>앱기능</td>
+<td>지출분류별(①) 통계 화면 (현금/카드, 카드(카드사명)별)</td>
+<td>F-5-4</td>
+<td>S-3-1</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-3-1-2</td>
+<td>앱기능</td>
+<td>지출처 Top N 화면</td>
+<td>F-5-5</td>
+<td>S-3-2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>F-3-1-3</td>
+<td>앱기능</td>
+<td>상세항목 Top10 화면 + 드릴다운(지출처별)</td>
+<td>F-5-6</td>
+<td>S-3-2, S-3-6</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-3-1-4</td>
+<td>앱기능</td>
+<td>단가 분석 화면(품목×단위 추이 차트)</td>
+<td>F-5-7</td>
+<td>S-3-3</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>F-3-1-5</td>
+<td>앱기능</td>
+<td>동의어 사전 관리 화면(운영자)</td>
+<td>F-1-1-13</td>
+<td>-</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>T-3-1</td>
+<td>테스트</td>
+<td>통계 정확도 검증(수동 계산값과 MV 결과 비교)</td>
+<td>F-5-x</td>
+<td>F-3-1-1~4</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td>T-3-2</td>
+<td>테스트</td>
+<td>캐시 갱신/무효화 테스트</td>
+<td>-</td>
+<td>S-3-6</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase 3 총합: 약 7.7세션 → 약 6~7일</strong></p>
+<hr />
+<h2>6. Phase 4 — 서브앱 확장 + 계정연결 정식화 (4단계)</h2>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-4-1</td>
+<td>시스템</td>
+<td><code>apps/sub-apps/subscription</code> 골격 + Webhook 발행 연동</td>
+<td>2</td>
+<td>S-2-1, S-2-2</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>S-4-2</td>
+<td>시스템</td>
+<td><code>apps/sub-apps/card-statement</code> 골격 + Webhook 발행 연동</td>
+<td>2</td>
+<td>S-2-1, S-2-2</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>F-4-1-1</td>
+<td>앱기능</td>
+<td>다중 서브앱 대응 UI 보정 (목록/매핑 화면 확장성 점검)</td>
+<td>F-1-2-1~3</td>
+<td>F-2-1-1~3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-4-3</td>
+<td>시스템</td>
+<td>Event Bus 전환 필요성 재검토 (서브앱 3개 기준 Webhook 부하 점검, 필요시 Upstash Kafka 등 도입)</td>
+<td>1, 8-1</td>
+<td>S-4-1, S-4-2</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>T-4-1</td>
+<td>테스트</td>
+<td>서브앱 3종 동시 연동 회귀테스트</td>
+<td>-</td>
+<td>S-4-1, S-4-2</td>
+<td>0.7</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase 4 총합: 약 3.3세션 → 약 3일</strong></p>
+<hr />
+<h2>7. Phase 5 — 통합 테스트 / QA / 출시</h2>
+<table>
+<thead>
+<tr>
+<th>TASK ID</th>
+<th>구분</th>
+<th>작업명</th>
+<th>참조</th>
+<th>선행작업</th>
+<th>세션</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T-5-1</td>
+<td>테스트</td>
+<td>전체 기능 회귀테스트(F-코드 전체 체크리스트)</td>
+<td>기능명세서_IA</td>
+<td>Phase 1~4 완료</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>T-5-2</td>
+<td>테스트</td>
+<td>RLS 정책 보안 점검(타 사용자 데이터 접근 차단 검증)</td>
+<td>3, 4</td>
+<td>S-1-9</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>T-5-3</td>
+<td>테스트</td>
+<td>반응형 크로스 디바이스 점검</td>
+<td>6</td>
+<td>F-1-9-1</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>T-5-4</td>
+<td>테스트</td>
+<td>성능 점검(대시보드 응답속도, MV/캐시 효과 확인)</td>
+<td>5, 8-1</td>
+<td>S-3-6</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>S-5-1</td>
+<td>시스템</td>
+<td>운영 환경 마이그레이션 최종 점검 + 프로덕션 배포</td>
+<td>8-3</td>
+<td>전체</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>S-5-2</td>
+<td>시스템</td>
+<td>모니터링/에러로깅 설정(선택)</td>
+<td>8-1</td>
+<td>S-5-1</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Phase 5 총합: 약 3.4세션 → 약 3일</strong></p>
+<hr />
+<h2>8. 전체 일정 요약</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>세션(추정)</th>
+<th>예상 소요일(1일 1.2세션 가정)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase 0 사전 셋업</td>
+<td>8.1</td>
+<td>7일</td>
+</tr>
+<tr>
+<td>Phase 1 메인앱 Core</td>
+<td>25.7</td>
+<td>21일</td>
+</tr>
+<tr>
+<td>Phase 2 서브앱 Webhook 연동</td>
+<td>9.8</td>
+<td>8일</td>
+</tr>
+<tr>
+<td>Phase 3 통계/캐시 고도화</td>
+<td>7.7</td>
+<td>6일</td>
+</tr>
+<tr>
+<td>Phase 4 서브앱 확장</td>
+<td>3.3</td>
+<td>3일</td>
+</tr>
+<tr>
+<td>Phase 5 통합테스트/QA/출시</td>
+<td>3.4</td>
+<td>3일</td>
+</tr>
+<tr>
+<td><strong>총합</strong></td>
+<td><strong>약 58.0세션</strong></td>
+<td><strong>약 48일(영업일 기준, 주말 제외 시 약 10주)</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>이 추정은 "TASK를 세션 단위로 끝낼 수 있게 잘게 쪼갠다"는 전제 위에서 나온 숫자이며, 실제로는 ① Claude Pro 세션당 처리량이 작업 복잡도/모델 선택에 따라 더 적거나 많을 수 있고 ② 1인 PM이 직접 검수/디버깅하는 시간(Claude 세션 외 시간)은 포함되지 않았습니다. <strong>1주차 진행 후 실제 세션 소진 속도를 <code>/usage</code>로 확인하여 Phase 1 일정을 보정</strong>하는 것을 권장합니다. 세션이 자주 부족하면 Max 5x 업그레이드를, 반대로 여유가 있으면 Phase를 병렬로 당겨와도 됩니다.</p>
+</blockquote>
+<hr />
+<h2>9. 작업 순서 검토 — 권장 진행 순서 핵심 원칙</h2>
+<ol>
+<li><strong>DB(S) 먼저, 화면(F) 나중</strong>: 모든 Phase에서 테이블/RLS 마이그레이션을 먼저 끝내고 화면을 붙입니다. 화면을 먼저 만들면 DB 스키마가 바뀔 때 재작업이 커집니다.</li>
+<li><strong>마스터 데이터(F-1-1-1~3) → 지출 입력(F-1-1-4~10) → 대시보드(F-5-x) 순서 고정</strong>: 지출 입력 화면은 지출분류/지출항목/지출처가 먼저 있어야 선택 UI를 만들 수 있고, 대시보드는 지출 데이터가 쌓여야 검증 가능합니다.</li>
+<li><strong>Phase 1의 "3-5. 지출 입력" 블록(8세션)이 최대 리스크 구간</strong>입니다. 이 블록만 따로 주 단위로 진행 상황을 점검하고, 필요하면 F-1-1-7(유사 항목 제안)·F-1-1-9/10(수량단위 구조화)처럼 "있으면 좋은" 기능은 우선순위를 낮춰 Phase 1 후반이나 Phase 3로 미루는 것도 가능합니다(단, 미룰 경우 데이터 스키마는 미리 만들어두고 UI만 늦추는 방식 권장 — 마이그레이션 재작업 방지).</li>
+<li><strong>통계(Phase 3)는 데이터가 어느 정도 쌓인 후 검증 가능</strong>하므로, Phase 1에서 임시로 만든 단순 쿼리 기반 대시보드(S-1-15)를 운영하면서 Phase 3에서 MV/캐시로 교체하는 점진적 전환을 권장합니다.</li>
+<li><strong>서브앱(Phase 2, 4)은 메인앱 Webhook 수신부(S-2-2~5)가 먼저 완성된 후</strong> 착수합니다 — 서브앱이 보낼 데이터 계약(<code>event-contracts</code>)이 먼저 확정돼야 서브앱 publisher 구현이 가능합니다.</li>
+<li><strong>테스트(T-코드)는 각 기능 블록이 끝날 때마다 바로 진행</strong> — 마지막에 몰아서 하면 버그 원인 추적이 어려워지고, 디버깅에 드는 Claude 세션이 급증합니다.</li>
+</ol>
+      </div>
+    </section>
+
+    <p class="about-lead">&larr; <a href="account-book.html">지출 관리 특화 가계부 프로젝트로 돌아가기</a></p>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="../assets/js/layout.js" defer></script>
+</body>
+</html>

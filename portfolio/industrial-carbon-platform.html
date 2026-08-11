@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>산업단지 탄소중립 통합관제 플랫폼 | 포트폴리오 | 정태희</title>
+<meta name="description" content="한국산업단지공단 산업단지 탄소중립 통합관제 플랫폼의 PRD·데이터 모델 기획과 아키텍처 방향 수립을 담당한 프로젝트 상세입니다.">
+<meta property="og:title" content="산업단지 탄소중립 통합관제 플랫폼 | 포트폴리오 | 정태희">
+<meta property="og:description" content="한국산업단지공단 산업단지 탄소중립 통합관제 플랫폼의 PRD·데이터 모델 기획과 아키텍처 방향 수립을 담당한 프로젝트 상세입니다.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/images/favicon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/images/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+  <div class="container">
+    <p class="detail-breadcrumb"><a href="../portfolio.html">포트폴리오</a> &gt; 산업단지 탄소중립 통합관제 플랫폼</p>
+
+    <section class="section detail-hero">
+      <p class="eyebrow">0&rarr;1 PM</p>
+      <h1 class="page-title">산업단지 탄소중립 통합관제 플랫폼</h1>
+      <dl class="detail-meta-row">
+        <div><dt>기간</dt><dd>2025.06 &ndash; 2026.01</dd></div>
+        <div><dt>역할</dt><dd>기획 리드(현업 기획자·개발 PL 간 조율 및 프로젝트 기획 방향 수립) </dd></div>
+        <div><dt>발주처</dt><dd>한국산업단지공단</dd></div>
+        <div><dt>컨소시엄: 4개사 참여</dt><dd></dd></div>
+        <div><dt>참여</dt><dd>PM 1명, 기획 2명(본인 포함), 개발 2명</dd></div>
+      </dl>
+      <div class="detail-links">
+        <a class="detail-link-btn" href="https://mrvkicox.com/ko/index" target="_blank" rel="noopener">서비스 바로가기 &rarr;</a>
+      </div>
+      <div class="detail-cover">
+        <img src="../assets/images/industrial-carbon-platform-cover.webp" alt="산업단지 MRV 플랫폼 랜딩 페이지 — 실시간 현장 데이터 계측, LCA 보고서 자동 생성, 제3자 검증, 글로벌 공급망 가시성 관리 4단계 소개 화면" class="detail-cover-img">
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">개요</h2>
+      <p class="about-body">산업단지 입주기업을 대상으로 에너지 실시간 계측(FEMS+), LCA 기반 탄소배출량 산정(LCA+)을 지원하여 수요기업 신청을 통해 별도 시스템 구축 없이도 시스템을 이용할 수 있습니다. </p>    
+      <p class="about-body">* 현재 홈페이지 디자인은 리뉴얼 되었습니다. </p>    
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">기획</h2>
+      <p class="about-body">별도 시스템인 LCA와 FEM+ 연계를 고려한 시스템 아키텍처 방향을 제시하고 개발 PL과 함께 기술 스택을 조율했습니다. 
+        <br>정책 요구사항과 기술적 구현 가능성 사이에서 의사결정을 주도해 공공기관 대상 프로젝트를 이끌었습니다.</p>
+      <ul class="plan-point-list">
+        <li class="plan-point">
+          <p class="plan-point-title">원스톱 통합 설계</p>
+          <p class="about-body">데이터 계측 &rarr; LCA 보고서 생성 &rarr; 제3자 검증까지 전 과정을 하나의 플랫폼에 담아, 기업이 여러 시스템·기관을 개별적으로 거치지 않고 한 곳에서 규제 대응을 끝낼 수 있도록 설계했습니다.</p>
+        </li>
+        <li class="plan-point">
+          <p class="plan-point-title">실측 데이터 기반 신뢰성 확보</p>
+          <p class="about-body">FEMS+(에너지관리시스템)의 실시간 계측 데이터를 LCA+(탄소관리시스템)의 산정 로직에 직접 연동시켜, 수기 입력이나 추정치가 아닌 실측 데이터를 기반으로 배출량을 산정하도록 했습니다. 규제·수출 대응에 필요한 데이터 신뢰성을 근본적으로 확보하려는 의도입니다.</p>
+        </li>
+        <!--
+        <li class="plan-point">
+          <p class="plan-point-title">글로벌 규제 대응의 서비스화</p>
+          <p class="about-body">CBAM, DPP, EU 배터리 규정, 에코디자인, ESG 공시 등 개별 기업이 스스로 파악·대응하기 힘든 해외 규제를 플랫폼이 미리 매핑해 제공함으로써, 자체 대응 역량이 부족한 산업단지 입주기업(중소기업 중심)의 진입장벽을 낮추려는 목적입니다.</p>
+        </li>
+        <li class="plan-point">
+          <p class="plan-point-title">검증까지 내재화한 완결성</p>
+          <p class="about-body">탄소 데이터는 자체 산정만으로는 규제·수출 요건을 충족하지 못하는 경우가 많기 때문에, 제3자 검증기관과의 연계(MOU, 검증의견서 발급)를 플랫폼 안에 포함시켜 "산정 &rarr; 공식 인증된 보고서"까지 하나의 흐름으로 완결되도록 설계했습니다.</p>
+        </li>
+        -->
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">디자인 &middot; 개발</h2>
+      <div class="detail-gallery">
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/industrial-carbon-platform-architecture.webp" alt="개발표준가이드 시스템 구성도 — OAuth 클라이언트 자격증명 흐름 시퀀스 다이어그램">
+          <figcaption>시스템 구성도 &middot; 개발표준가이드</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/industrial-carbon-platform-api-spec.webp" alt="API 인터페이스 정의서 — 회사 조회 API 요청·응답 필드 명세와 예시">
+          <figcaption>API 인터페이스 정의서</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/industrial-carbon-platform-ui-simulation.webp" alt="공급망 탄소배출량 시뮬레이션 화면 — 협력사별 탄소배출량 계층 구조 시각화">
+          <figcaption>공급망 탄소배출량 시뮬레이션 UI</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">결과 &middot; 회고</h2>
+      <p class="about-body">이번 프로젝트에서 가장 부딪혔던 부분은 컨소시엄을 이루는 여러 담당자들과의 조율이었습니다. 컨소시엄은 하나의 목표를 향해 움직이는 것 같아도, 
+        <br>각 회사마다 우선순위와 일정 감각이 달랐습니다. 전체 프로젝트 타임라인을 맞추려면 각 담당자의 입장을 하나씩 확인하고 조정하는 과정이 필요했습니다.
+        <br>컨소시엄 프로젝트는 내부 일정 관리만큼이나, 외부 이해관계자로부터 필요한 것을 제때 받아내는 능력이 중요하다는 것을 배웠습니다.</p>
+      <p class="about-body">실질적으로 집중해서 담당한 부분은 서로 다른 시스템인 FEMS+와 LCA+ 데이터를 연계하기 위한 LCA 연계 프로세스와 API 설계였습니다. 
+        <br>개발 PL과 함께 각 시스템에서 어떤 데이터를 어떤 형식으로 주고받아야 LCA 산정에 문제가 없을지 하나씩 맞춰가며 설계했고, 이 부분은 컨소시엄 조율의 어려움과는 별개로 명확한 성과로 남았습니다.</p>
+      <p class="about-body">다양한 변수 속에서도 프로젝트를 기한 내에 1차 완료하고 외부 시연까지 성공적으로 마칠 수 있었습니다. 이번 컨소시엄 프로젝트는 기술 설계만큼이나 사람과 일정을 조율하는 역량이 결과를 좌우한다는 것을 깨닫게 해 준 소중한 경험이었습니다.</p>
+    </section>
+
+    <div id="detail-prevnext"></div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="../assets/js/layout.js" defer></script>
+<script src="../assets/js/portfolio-nav.js" defer></script>
+</body>
+</html>
