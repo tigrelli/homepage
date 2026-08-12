@@ -54,8 +54,8 @@
       <h2 class="section-heading">개요</h2>
       <p class="about-body">TFT(전략적 팀 전투) 메타는 패치마다 바뀌고, 정작 &ldquo;지금 뭘 써야 이기는지&rdquo;는 여러 커뮤니티&middot;영상을 뒤져야 알 수 있습니다. TFT Hideout은 티어리스트&middot;조합&middot;아이템&middot;증강체 데이터를 하나의 정규화된 데이터 계층으로 모으고, 이를 탐색형(웹사이트)과 질의응답형(챗봇 RAG) 두 채널로 동시에 제공하는 개인&middot;비상업 목적 MVP입니다. 본인 + 지인 약 10명 규모로 범위를 한정해, &ldquo;만들 수 있는 최소 기능&rdquo;이 아니라 &ldquo;직접 매일 써도 되는 완성도&rdquo;를 목표로 설계했습니다.</p>
       <div class="axis-grid">
-        <div class="axis-chip"><div class="axis-num">&#9312; BROWSE</div><div class="axis-name">카탈로그 웹사이트</div><div class="axis-desc">티어리스트 &middot; 조합상세 &middot; 아이템빌드 &middot; 증강체정보 4화면</div></div>
-        <div class="axis-chip"><div class="axis-num">&#9313; ASK</div><div class="axis-name">챗봇 RAG</div><div class="axis-desc">하이브리드 검색 + sLLM, 전 페이지 전역 위젯</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9312; BROWSE</div><div class="axis-name">카탈로그 웹사이트</div><div class="axis-desc">티어리스트 &middot; 조합상세 &middot; 아이템빌드 <br> 증강체정보 4화면</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9313; ASK</div><div class="axis-name">챗봇 RAG</div><div class="axis-desc">하이브리드 검색 + sLLM<br> 전 페이지 전역 위젯</div></div>
         <div class="axis-chip"><div class="axis-num">&#9314; REVIEW</div><div class="axis-name">사후 패인 분석</div><div class="axis-desc">Riot ID 연동, 코칭형 리포트(비로그인)</div></div>
       </div>
       <p class="about-body" style="margin-top:20px;">PM(기획자) 1인이 Claude Code와의 페어프로그래밍으로 요구사항 정의부터 아키텍처&middot;DB 스키마 설계, RAG 파이프라인, 화면 구현, 테스트, 배포까지 전 과정을 주도했습니다. 모든 인프라는 무료 티어(Render&middot;Cloudflare Pages&middot;Supabase&middot;Groq&middot;Hugging Face)로 구성해, 비상업 개인 프로젝트 규모에 맞는 비용 구조를 처음부터 설계에 반영했습니다.</p>
@@ -128,10 +128,13 @@
         <span class="portfolio-tag">BGE-M3 (HF Inference)</span>
         <span class="portfolio-tag">RAGAS</span>
         <span class="portfolio-tag">GitHub Actions</span>
+        <span class="portfolio-tag">Tavily Search API</span>
       </div>
       <ul class="feature-list">
         <li><strong>무료 인프라 재설계 2건</strong> &mdash; 애초 계획했던 Upstash Redis 캐시를 제거하고 PostgreSQL 테이블(chat_answer_cache, puuid_cache)로 통합, Metabase는 Render 무료 플랜(512MB)에서 OOM으로 배포가 불가해 KPI 대시보드를 자체 페이지(/kpi, 비밀번호 게이트)로 직접 구현. 둘 다 &ldquo;계획대로 안 되면 바로 대안 설계 &rarr; 문서 반영&rdquo;으로 처리한 사례.</li>
         <li><strong>RAG 파이프라인</strong> &mdash; 입력을 4종 의도(조합/아이템/증강체 추천, 일반 전략 질문)로 분류 후 하이브리드 검색 &rarr; 프롬프트 조립 &rarr; sLLM(Groq Llama 3.3 70B) 스트리밍 응답. 정책이 걸린 로직(Legend 승률 비노출, 상대 닉네임 마스킹)은 전처리(컨텍스트 제외) + 후처리(정규식 재검사) 이중 방어로 구현.</li>
+        <li><strong>실시간 웹 검색 보강 경로</strong> &mdash; 조합/아이템/증강체 추천 등 4개 의도는 이미 적재된 내부 DB만 조회한다는 원칙(외부 API를 질문마다 직접 호출하지 않음)을 따르지만, 내부 RAG로 답할 수 없는 질문은 Tavily 웹 검색 API를 질문마다 실시간 호출해 상위 3건 스니펫을 근거로 답변합니다. 원칙에서 벗어나는 범위를 카테고리 하나로 한정했고, 근거 표기 방식도 다른 4개 의도(patch_version 명시)와 달리 출처 URL을 표기하도록 시스템 프롬프트를 별도로 분리했습니다. 
+          오프토픽(TFT 무관) 판별도 1차 키워드 → 2차 LLM 재확인 방식으로 함께 보강해, 키워드만으로 애매한 TFT 관련 질문(예: 시즌 일정)이 조기 차단되지 않도록 했습니다.</li>
         <li><strong>데이터 파이프라인 선행 조사</strong> &mdash; 공식 TFT DDragon 신규 구조가 아직 없다는 것을 스파이크로 먼저 확인하고 Community Dragon으로 대체, op.gg MCP 응답 스키마도 실호출로 먼저 검증한 뒤 배치 워커를 구현. 패치 전환은 patches.is_current 플래그를 배치 전체 성공 시점에만 트랜잭션으로 원자적 전환해 정합성을 보장.</li>
         <li><strong>세션 간 컨텍스트 관리</strong> &mdash; TASK 1개 = 세션 1개 단위로 쪼개고, 구현 &rarr; 테스트 작성/통과 &rarr; 자체검증 &rarr; PM 확인요청 &rarr; 작업결과 기록 &rarr; 진행현황 갱신 &rarr; 커밋/푸시 순서를 고정. PM 승인 전에는 완료 처리도 커밋도 하지 않는 게이트를 문서로 강제.</li>
         <li><strong>CI/CD</strong> &mdash; GitHub Actions로 backend pytest&middot;frontend Vitest 자동 실행, 실패 시 브랜치 보호로 머지 차단. 테스트 fixture는 실제 Riot ID/PUUID를 쓰지 않고 스키마만 실제&middot;값은 합성으로 구성.</li>
