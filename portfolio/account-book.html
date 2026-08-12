@@ -42,6 +42,16 @@
     </section>
 
     <section class="section">
+      <p><span class="detail-impression-highlight">“소스 코드를 보지 않고도 AI와 함께 실제 서비스를 처음부터 끝까지 개발할 수 있을까?”</span>​를 검증하기 위해 시작한 프로젝트입니다.
+        <br>기획 단계에서는 Claude&middot;Gemini&middot;ChatGPT를 함께 이용했고, 실제 개발은 Claude Code와 진행하며 토큰 사용량 관리, 코딩 규칙 준수, 
+        <br>무분별한 커밋&middot;푸시를 막는 CI/CD 원칙을 세워 진행했습니다.</p>
+      <p>가장 놀라웠던 건 실제 개발 과정이 휴먼 개발자와 협업하는 것과 다르지 않았다는 점입니다. 초기 기획의 허점이 개발 중에 드러나 다시 조율해야 
+        <br>했고, 오류의 근본 원인을 기획 단계까지 거슬러 올라가 찾아야 했습니다. 단순한 웹 개발이라면 이제 정말 말로만 홈페이지를 만들 수 있는 세상이 
+        <br>되었다는 걸 체감했습니다 &mdash; 지금 이 포트폴리오 사이트도 HTML만으로 만들어졌습니다.</p>
+       <p>AI 시대의 PM/PO는 단순히 문서를 만드는 역할에서 벗어나, 문제를 정의하고 AI와 개발 과정을 조율하며, 빠르게 만들어진 결과물을 검증하고 개선하면서 높아진 개발 생산성과 속도를 실제 제품의 성과로 연결할 수 있어야겠다고 느꼈습니다.</p>        
+    </section>
+
+    <section class="section">
       <h2 class="section-heading">개요</h2>
       <p class="about-body">기존 가계부 앱 대부분은 지출을 &ldquo;카테고리&rdquo; 한 축으로만 분류합니다. 그런데 실제로 &ldquo;이번 달에 왜 이렇게 썼지?&rdquo;를 알고 싶을 때 필요한 건 카테고리뿐 아니라 무엇으로 결제했는지, 어디서 썼는지, 구체적으로 뭘 샀는지까지입니다. payLens는 지출 1건을 아래 4개의 독립된 축으로 분해해 설계한 지출 관리 특화 가계부입니다.</p>
       <div class="axis-grid">
@@ -58,19 +68,19 @@
       <p class="about-body">기획 문서는 아키텍처 설계 &rarr; 기능명세(IA) &rarr; WBS(작업분해) &rarr; 진행현황 4단으로 분리해 관리했습니다. 계획 문서(WBS)는 진행 중 고치지 않고, 진행 상황만 별도 체크리스트 파일에 반영하는 방식으로 &ldquo;지금 계획이 뭐였는지&rdquo;와 &ldquo;지금 어디까지 됐는지&rdquo;가 섞이지 않게 했습니다 &mdash; AI와 여러 세션에 걸쳐 협업할 때 컨텍스트가 흐트러지지 않도록 하기 위한 장치였습니다.</p>
       <ul class="plan-point-list">
         <li class="plan-point">
-          <a class="plan-point-title doc-link" href="account-book-architecture.html">가계부_아키텍처_설계.md </a>
+          <a class="plan-point-title doc-link" href="account-book-architecture.html">가계부_아키텍처_설계 </a>
           <p class="about-body">전체 구조도(Mermaid), 지출 4축 데이터 모델, ERD, 로드맵 8장 구성.</p>
         </li>
         <li class="plan-point">
-          <a class="plan-point-title doc-link" href="account-book-ia.html">기능명세서_IA.md &#8250;</a>
+          <a class="plan-point-title doc-link" href="account-book-ia.html">기능명세서_IA &#8250;</a>
           <p class="about-body">F-코드 기반 기능 명세 + 정보구조(IA), 실제 구현 완료 메뉴 표를 별도로 관리.</p>
         </li>
         <li class="plan-point">
-          <a class="plan-point-title doc-link" href="account-book-wbs.html">WBS.md &#8250;</a>
+          <a class="plan-point-title doc-link" href="account-book-wbs.html">WBS &#8250;</a>
           <p class="about-body">TASK 단위 세션 추정 + PM 승인 후에만 체크되는 진행 체크리스트.</p>
         </li>
         <li class="plan-point">
-          <a class="plan-point-title doc-link" href="account-book-progress.html">진행현황.md &#8250;</a>
+          <a class="plan-point-title doc-link" href="account-book-progress.html">진행현황 &#8250;</a>
           <p class="about-body">WBS.md의 TASK 목록을 체크리스트로 옮긴 진행 현황 문서. TASK 완료 시 PM 확인 후 체크박스만 갱신.</p>
         </li>
       </ul>
@@ -155,14 +165,14 @@ payLens<br>
     </section>
 
     <section class="section">
-      <h2 class="section-heading">결과&middot;회고</h2>
+      <h2 class="section-heading">결과</h2>
       <div class="stat-row">
         <div class="stat-card"><div class="stat-num">90/90</div><div class="stat-label">단위 테스트 통과</div></div>
         <div class="stat-card"><div class="stat-num">46/46</div><div class="stat-label">E2E 테스트 통과</div></div>
         <div class="stat-card"><div class="stat-num">최대 6배</div><div class="stat-label">통계 조회 성능 개선(MV)</div></div>
       </div>
-      <p class="about-body">1인 기획자로서 AI와의 페어프로그래밍만으로 설계 &rarr; 화면 구현 &rarr; 테스트 &rarr; 프로덕션 배포까지 완주했습니다. 문서를 &ldquo;설계서 / 기능명세 / 작업분해 / 진행현황&rdquo; 4단으로 분리한 덕분에, 여러 세션에 걸쳐 작업해도 &ldquo;지금 뭘 왜 하는지&rdquo;에 대한 컨텍스트가 유실되지 않았고, 검증 과정에서 발견한 버그(RLS GRANT 누락, 캐시 무효화 지연, 폼 select 리셋 등)도 원인과 함께 각 작업 항목에 기록해 재발을 방지했습니다. 성능도 &ldquo;될 것 같다&rdquo;에 기대지 않고 EXPLAIN ANALYZE&middot;Redis 응답시간 실측으로 검증하는 습관을 지켰습니다.</p>
-      <p class="about-body">1차 개발(인증, 지출 입력, 마스터데이터 관리, 예산, 대시보드 통계 6종, 캐싱, QA)은 완료해 프로덕션에 배포했고, 2차로 관리비 명세서 OCR 자동 등록과 구독료&middot;카드내역 서브앱 확장을 기획 중입니다.</p>
+      <p class="about-body">1인 기획자로서 AI와의 페어프로그래밍만으로 설계 &rarr; 화면 구현 &rarr; 테스트 &rarr; 프로덕션 배포까지 진행했습니다. 문서를 설계서&middot;기능명세&middot;작업분해&middot;진행현황 4단으로 분리한 덕분에 여러 세션에 걸쳐 작업해도 &ldquo;지금 뭘 왜 하는지&rdquo;에 대한 컨텍스트가 유실되지 않았고, 검증 과정에서 발견한 버그(RLS GRANT 누락, 캐시 무효화 지연, 폼 select 리셋 등)도 원인과 함께 각 작업 항목에 기록해 재발을 막았습니다. 성능도 &ldquo;될 것 같다&rdquo;는 감에 기대지 않고 EXPLAIN ANALYZE, Redis 응답시간 실측으로 검증하는 습관을 지켰습니다.</p>
+      <p class="about-body">1차 개발(인증, 지출 입력, 마스터데이터 관리, 예산, 대시보드 통계 6종, 캐싱, QA)을 완료해 프로덕션에 배포했고, 2차로 관리비 명세서 OCR 자동 등록과 구독료&middot;카드내역 서브앱 확장을 기획 중입니다.</p>
     </section>
 
     <div id="detail-prevnext"></div>

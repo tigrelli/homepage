@@ -28,29 +28,148 @@
 
     <section class="section detail-hero">
       <p class="eyebrow">AI 개인 프로젝트</p>
-      <h1 class="page-title">TFT Hideout</h1>
+      <h1 class="page-title">TFT 메타 정보 sLLM + RAG 서비스</h1>
+      <p class="detail-tagline">TFT Hideout &mdash; &ldquo;메타를 찾아보지 말고, 물어보게 하자&rdquo; &middot; 카탈로그(웹) + 챗봇(RAG) + 사후 패인 분석</p>
       <dl class="detail-meta-row">
-        <div><dt>구분</dt><dd>개인 프로젝트</dd></div>
-        <div><dt>역할</dt><dd>기획, 개발 (생성형 AI 활용)</dd></div>
+        <div><dt>기간</dt><dd>2026.07.30 &ndash; <span class="text-red">진행중</span> (개인&middot;비상업 MVP)</dd></div>
+        <div><dt>역할</dt><dd>PM&middot;기획 (1인)</dd></div>
+        <div><dt>팀 구성</dt><dd>1인 + AI 페어프로그래밍(Claude Code, 개발 전담)</dd></div>
+        <div><dt>기술</dt><dd>Next.js &middot; FastAPI &middot; Supabase(pgvector) &middot; Groq LLM</dd></div>
       </dl>
       <div class="detail-links">
         <a class="detail-link-btn" href="https://tft-hideout.suraholic.workers.dev/" target="_blank" rel="noopener">서비스 바로가기 &rarr;</a>
       </div>
-      <div class="media-placeholder media-placeholder-cover">커버 이미지 준비 중</div>
+    </section>
+
+    <section class="section">
+      <p>무료 티어 sLLM은 파인튜닝도, 프롬프트 튜닝도 한계가 명확했습니다.
+         <br><span class="detail-impression">하지만 AI 챗봇을 직접 만들어보면서, 결국 품질을 좌우하는 것은 모델 자체보다 모델에게 어떤 정보를 보여주고, 어떤 범위까지 답변하도록 할 것인지를 
+         <br>얼마나 꼼꼼하게 설계하느냐​라는 것을 배웠습니다</span>. 특히 데이터 구조를 잘못 설계하면 할루시네이션으로 이어질 수 있다는 점과, 검색 결과의 품질을 
+         <br>사전에 검증하는 방법까지 설계 단계에서 충분히 고민할 필요가 있다는 것을 느꼈습니다. AI 제품은 일반적인 서비스처럼 화면이 깨지거나 기능이 
+         <br>동작하지 않는 방식으로 문제가 드러나는 것이 아니라, 자연스럽지만 잘못된 답변을 만들어내며 실패할 수 있다는 걸 크게 체감할 수 있었습니다.</p>
+      <p>RAG와 임베딩의 품질을 어떻게 평가하고 검증할 수 있는지, AI 제품의 실패 가능성을 개발 전에 어떻게 체계적으로 설계할 수 있는지 더 깊이 공부해보려고 합니다.</p>
     </section>
 
     <section class="section">
       <h2 class="section-heading">개요</h2>
-      <p class="about-body">롤토체스(TFT) 코칭 챗봇입니다. 생성형 AI로 기획과 개발을 직접 진행한 개인 프로젝트로, 업무 밖에서도 AI를 활용해 제품을 만들어보는 경험을 쌓았습니다.</p>
-      <p class="about-body">상세 기획 배경과 기능 소개는 준비 중입니다.</p>
+      <p class="about-body">TFT(전략적 팀 전투) 메타는 패치마다 바뀌고, 정작 &ldquo;지금 뭘 써야 이기는지&rdquo;는 여러 커뮤니티&middot;영상을 뒤져야 알 수 있습니다. TFT Hideout은 티어리스트&middot;조합&middot;아이템&middot;증강체 데이터를 하나의 정규화된 데이터 계층으로 모으고, 이를 탐색형(웹사이트)과 질의응답형(챗봇 RAG) 두 채널로 동시에 제공하는 개인&middot;비상업 목적 MVP입니다. 본인 + 지인 약 10명 규모로 범위를 한정해, &ldquo;만들 수 있는 최소 기능&rdquo;이 아니라 &ldquo;직접 매일 써도 되는 완성도&rdquo;를 목표로 설계했습니다.</p>
+      <div class="axis-grid">
+        <div class="axis-chip"><div class="axis-num">&#9312; BROWSE</div><div class="axis-name">카탈로그 웹사이트</div><div class="axis-desc">티어리스트 &middot; 조합상세 &middot; 아이템빌드 &middot; 증강체정보 4화면</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9313; ASK</div><div class="axis-name">챗봇 RAG</div><div class="axis-desc">하이브리드 검색 + sLLM, 전 페이지 전역 위젯</div></div>
+        <div class="axis-chip"><div class="axis-num">&#9314; REVIEW</div><div class="axis-name">사후 패인 분석</div><div class="axis-desc">Riot ID 연동, 코칭형 리포트(비로그인)</div></div>
+      </div>
+      <p class="about-body" style="margin-top:20px;">PM(기획자) 1인이 Claude Code와의 페어프로그래밍으로 요구사항 정의부터 아키텍처&middot;DB 스키마 설계, RAG 파이프라인, 화면 구현, 테스트, 배포까지 전 과정을 주도했습니다. 모든 인프라는 무료 티어(Render&middot;Cloudflare Pages&middot;Supabase&middot;Groq&middot;Hugging Face)로 구성해, 비상업 개인 프로젝트 규모에 맞는 비용 구조를 처음부터 설계에 반영했습니다.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">기획 (PRD&middot;IA)</h2>
+      <p class="about-body">기획 문서는 PRD &rarr; 개발설계서 &rarr; IA/화면설계서/디자인가이드 &rarr; WBS/진행현황 순으로 우선순위를 명시해 관리했습니다. AI와 여러 세션에 걸쳐 협업하다 보니 매 세션 수십 페이지 원본 문서를 다시 읽는 비용이 컸는데, 이를 줄이기 위해 문서를 원본 확정본(source)&middot;경량 요약본(reference)&middot;구버전 보관(archive) 3단으로 분리하고, TASK 그룹별로 &ldquo;우선 참조 파일&rdquo;을 CLAUDE.md에 표로 고정했습니다.</p>
+      <ul class="plan-point-list">
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="tft-hideout-prd.html">TFT_sLLM_PRD_v1.3_최종</a>
+          <p class="about-body">제품 요구사항, 사용자 플로우, Legend 승률 비노출 등 정책 근거(10&middot;12장).</p>
+        </li>
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="tft-hideout-architecture.html">TFT_sLLM_개발설계서_v1.7</a>
+          <p class="about-body">아키텍처&middot;DB 스키마(ERD)&middot;API 명세&middot;RAG 파이프라인 설계(4.4장).</p>
+        </li>
+        <li class="plan-point">
+          <a class="plan-point-title doc-link" href="tft-hideout-progress.html">진행현황</a>
+          <p class="about-body">109 TASK(취소 3 포함, 활성 106) 단위 분해, TASK별 테스트 요구사항 컬럼 포함.</p>
+        </li>
+      </ul>
+      <p class="doc-notice" style="margin-top:20px;">&#8251; 위 설계 문서들은 사후에 정리한 산출물이 아니라, Claude Code와 세션마다 대화하며 실제로 갱신해 온 원문입니다 
+        <br>&mdash; PRD는 v1.3, 개발설계서는 Redis 제거 등 인프라 변경을 반영해 v1.7까지 개정되었습니다.</p>
+      <p class="plan-point-title" style="margin-top:24px;">정보구조(IA) &mdash; 사이트맵</p>
+      <div class="ia-tree">
+/<br>
+&#9500;&#9472; /tierlist <span class="fade">&mdash; 홈&middot;티어리스트, 조합 카드/표 + 필터(패치&middot;랭크)</span><br>
+&#9474;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; /comps/{comp_id} <span class="fade">&mdash; 조합 상세: 챔피언 구성&middot;추천 증강체&middot;아이템 빌드 연결</span><br>
+&#9500;&#9472; /items/builds <span class="fade">&mdash; 아이템 빌드, 챔피언별 조합&middot;픽률&middot;평균등수&middot;승률</span><br>
+&#9500;&#9472; /augments <span class="fade">&mdash; 증강체 정보, Legend 계열은 승률 비노출(정책)</span><br>
+&#9500;&#9472; /analysis <span class="fade">&mdash; 사후 패인 분석, Riot ID 연동(비로그인, localStorage)</span><br>
+&#9474;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; /analysis/{match_id}/report <span class="fade">&mdash; 코칭 리포트: 잘한점&middot;아쉬운점&middot;다음게임 제안</span><br>
+&#9500;&#9472; /kpi <span class="fade">&mdash; KPI 대시보드, 비밀번호 게이트, GNB 미노출(PM 전용)</span><br>
+&#9492;&#9472; [전역 레이어] 챗봇 위젯 <span class="fade">&mdash; 모든 페이지에 중첩, 별도 URL 없음</span>
+      </div>
+      <p class="about-body" style="margin-top:12px; font-size:0.8125rem;">&#8251; 챗봇은 별도 URL 계층 없이 전 페이지에 수평 중첩되는 전역 컴포넌트로 설계했고(IA 2장), &ldquo;방금 게임 분석해줘&rdquo; 같은 대화로 /analysis와 동일한 분석 로직을 트리거할 수 있습니다.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">디자인</h2>
+      <p class="about-body">서비스 자체 BI로 TFT Hideout 컬러 시스템을 별도 정의했습니다. 원칙은 &ldquo;데이터 우선(Data-first)&rdquo; &mdash; 장식보다 표&middot;카드&middot;수치의 가독성을 우선하고, 웹사이트와 챗봇 두 채널이 같은 색상&middot;타이포&middot;버튼 스타일을 공유해 하나의 서비스로 인지되게 했습니다. Figma MCP 연동은 2026-08-04 PM 결정으로 취소하고, 이후 프론트엔드 작업은 디자인가이드(design-tokens) + 화면설계서 2개 문서만으로 진행했습니다.</p>
+      <ul class="chip-row" style="margin-top:14px;">
+        <li class="chip">Data-first</li>
+        <li class="chip">근거 명시</li>
+        <li class="chip">웹&middot;챗봇 시각 일관성</li>
+        <li class="chip">반응형 값 유지</li>
+      </ul>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-color" style="background:#4059D9;"></div><div class="swatch-info"><div class="swatch-name">Primary</div><div class="swatch-hex">#4059D9 &middot; CTA/챗봇/GNB</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#E59933;"></div><div class="swatch-info"><div class="swatch-name">Accent (Carry)</div><div class="swatch-hex">#E59933 &middot; 캐리 챔피언 보더</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#E5B93D;"></div><div class="swatch-info"><div class="swatch-name">S Tier</div><div class="swatch-hex">#E5B93D &middot; 티어 배지(권장안)</div></div></div>
+        <div class="swatch"><div class="swatch-color" style="background:#D9D9D9;"></div><div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-hex">#D9D9D9 &middot; 카드/구분선</div></div></div>
+      </div>
+      <p class="about-body" style="margin-top:16px;">티어 배지 색상은 화면설계서에 &ldquo;디자인 재량&rdquo;으로 명시되어 미확정이었던 항목이라, 게임 내 등급 표기 관행을 근거로 S(골드)&middot;A(퍼플 <span style="color:#8C6FE0;font-weight:700;">#8C6FE0</span>)&middot;B(블루 <span style="color:#4C9BE0;font-weight:700;">#4C9BE0</span>)&middot;C(그레이) 권장안을 디자인가이드에 직접 문서화했습니다. Legend 계열 증강체는 승률 수치 대신 &ldquo;승률 표시 안함&rdquo; 문구를 Tertiary 컬러(#8C8C8C)로 표기해, 데이터 부재와 정책상 비노출을 구분되게 표현했습니다.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">개발</h2>
+      <div class="portfolio-tag-row">
+        <span class="portfolio-tag">Next.js (App Router)</span>
+        <span class="portfolio-tag">TypeScript</span>
+        <span class="portfolio-tag">Tailwind CSS</span>
+        <span class="portfolio-tag">Cloudflare Pages</span>
+        <span class="portfolio-tag">FastAPI (Python)</span>
+        <span class="portfolio-tag">Render</span>
+        <span class="portfolio-tag">Supabase (Postgres + pgvector)</span>
+        <span class="portfolio-tag">LangChain</span>
+        <span class="portfolio-tag">Groq API &middot; Llama 3.3 70B</span>
+        <span class="portfolio-tag">BGE-M3 (HF Inference)</span>
+        <span class="portfolio-tag">RAGAS</span>
+        <span class="portfolio-tag">GitHub Actions</span>
+      </div>
+      <ul class="feature-list">
+        <li><strong>무료 인프라 재설계 2건</strong> &mdash; 애초 계획했던 Upstash Redis 캐시를 제거하고 PostgreSQL 테이블(chat_answer_cache, puuid_cache)로 통합, Metabase는 Render 무료 플랜(512MB)에서 OOM으로 배포가 불가해 KPI 대시보드를 자체 페이지(/kpi, 비밀번호 게이트)로 직접 구현. 둘 다 &ldquo;계획대로 안 되면 바로 대안 설계 &rarr; 문서 반영&rdquo;으로 처리한 사례.</li>
+        <li><strong>RAG 파이프라인</strong> &mdash; 입력을 4종 의도(조합/아이템/증강체 추천, 일반 전략 질문)로 분류 후 하이브리드 검색 &rarr; 프롬프트 조립 &rarr; sLLM(Groq Llama 3.3 70B) 스트리밍 응답. 정책이 걸린 로직(Legend 승률 비노출, 상대 닉네임 마스킹)은 전처리(컨텍스트 제외) + 후처리(정규식 재검사) 이중 방어로 구현.</li>
+        <li><strong>데이터 파이프라인 선행 조사</strong> &mdash; 공식 TFT DDragon 신규 구조가 아직 없다는 것을 스파이크로 먼저 확인하고 Community Dragon으로 대체, op.gg MCP 응답 스키마도 실호출로 먼저 검증한 뒤 배치 워커를 구현. 패치 전환은 patches.is_current 플래그를 배치 전체 성공 시점에만 트랜잭션으로 원자적 전환해 정합성을 보장.</li>
+        <li><strong>세션 간 컨텍스트 관리</strong> &mdash; TASK 1개 = 세션 1개 단위로 쪼개고, 구현 &rarr; 테스트 작성/통과 &rarr; 자체검증 &rarr; PM 확인요청 &rarr; 작업결과 기록 &rarr; 진행현황 갱신 &rarr; 커밋/푸시 순서를 고정. PM 승인 전에는 완료 처리도 커밋도 하지 않는 게이트를 문서로 강제.</li>
+        <li><strong>CI/CD</strong> &mdash; GitHub Actions로 backend pytest&middot;frontend Vitest 자동 실행, 실패 시 브랜치 보호로 머지 차단. 테스트 fixture는 실제 Riot ID/PUUID를 쓰지 않고 스키마만 실제&middot;값은 합성으로 구성.</li>
+      </ul>
     </section>
 
     <section class="section">
       <h2 class="section-heading">스크린샷</h2>
       <div class="detail-gallery">
-        <div class="media-placeholder">서비스 스크린샷 준비 중</div>
-        <div class="media-placeholder">서비스 스크린샷 준비 중</div>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/tft-hideout-tierlist.webp" alt="티어리스트 화면 — 패치 17.8 기준 조합 카드 그리드, 티어 배지·평균등수·픽률·승률·캐리 챔피언 정보 표시">
+          <figcaption>티어리스트 (홈)</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/tft-hideout-item-build.webp" alt="아이템 빌드 화면 — 챔피언별 추천 아이템 조합 리스트와 우하단 플로팅 챗봇 위젯">
+          <figcaption>아이템 빌드 &middot; 챗봇 위젯</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/tft-hideout-chatbot.webp" alt="모바일 챗봇 대화 화면 — 현재 패치와 주요 덱을 묻는 질문에 근거 링크를 포함해 답변하는 RAG 챗봇">
+          <figcaption>챗봇 RAG (모바일)</figcaption>
+        </figure>
+        <figure class="detail-gallery-item">
+          <img src="../assets/images/tft-hideout-augments.webp" alt="모바일 증강체 정보 화면 — 등급별(골드/실버) 증강체 카드와 효과 설명 리스트">
+          <figcaption>증강체 정보 (모바일)</figcaption>
+        </figure>
       </div>
+    </section>
+
+    <section class="section">
+      <!--<h2 class="section-heading">결과&middot;회고</h2>-->
+      <h2 class="section-heading">결과</h2>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num">68/106</div><div class="stat-label">활성 TASK 완료(취소 3건 제외)</div></div>
+        <div class="stat-card"><div class="stat-num">7개</div><div class="stat-label">화면 설계 확정(IA 기준)</div></div>
+        <div class="stat-card"><div class="stat-num">2건</div><div class="stat-label">무료 인프라 한계 대응 재설계</div></div>
+      </div>
+      <p class="about-body">카탈로그 3개 화면(티어리스트&middot;조합상세&middot;아이템빌드&middot;증강체정보)과 챗봇 RAG 파이프라인, CI 게이트, KPI 백엔드는 완료해 배포까지 마쳤고, 현재는 사후 패인 분석(Riot Personal Key 재발급 대기 중)과 통합/E2E 테스트, 스테이징 배포 단계를 진행 중입니다(전체 진행률 64%, 2026.08.12 기준). 대그룹 9개(시스템설정&middot;데이터파이프라인&middot;백엔드API&middot;챗봇RAG&middot;사후패인분석&middot;프론트엔드&middot;KPI모니터링&middot;테스트&middot;배포릴리즈) 중 시스템설정&middot;백엔드API&middot;챗봇RAG는 거의 완료 단계이며, 실사용(PM 본인) 중 발견한 이슈&mdash;증강체 설명 플레이스홀더, 조합 헥스 배치 좌표, 아이템 효과 RAG 미연동, 검색 신뢰도 임계값 부재 등&mdash;를 TASK로 즉시 분리해 반영하는 방식으로 계획을 계속 갱신해 왔습니다.</p>
+      <p class="about-body">1인 기획자로서 AI와의 페어프로그래밍만으로 요구사항 정의 &rarr; 설계 &rarr; 구현 &rarr; 테스트 &rarr; PM 검증까지 전 과정을 운영하며 얻은 교훈은, &ldquo;계획대로 안 될 항목을 미리 다 예측하기보다, 계획이 틀렸을 때 바로 문서에 반영하고 다음 세션이 그걸 다시 조사하지 않게 만드는 절차&rdquo;가 더 중요하다는 점이었습니다. Redis 제거, Metabase 대체, Figma 연동 취소 모두 진행 중 발견한 제약에 대한 PM 결정이었고, 셋 다 CLAUDE.md&middot;design-tokens.md 갱신으로 다음 세션에 곧바로 반영되었습니다. 남은 작업은 사후 패인 분석 API/스코어링 로직, 통합&middot;회귀 테스트, 스테이징&middot;프로덕션 배포이며, 완료 후에는 저장소를 포트폴리오 공개용으로 전환할 계획입니다.</p>
     </section>
 
     <div id="detail-prevnext"></div>

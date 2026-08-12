@@ -312,6 +312,34 @@ button:focus-visible {
   margin-top: 10px;
 }
 
+.detail-impression {
+  margin: 0 0 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.75;
+  color: var(--accent-strong);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.detail-impression + .detail-impression {
+  margin-top: 16px;
+}
+
+.detail-impression-highlight {
+  color: #c0392b;
+}
+
+.text-highlight {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.text-red {
+  font-weight: inherit;
+  color: #c0392b;
+}
+
 .plan-point-list {
   list-style: none;
   margin: 0;
@@ -1214,6 +1242,21 @@ a.plan-point-title.doc-link:hover {
 }
 
 .markdown-content .mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-content figure {
+  margin: 16px 0;
+  padding: 12px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.markdown-content figure img {
   max-width: 100%;
   height: auto;
 }
