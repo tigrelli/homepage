@@ -1126,6 +1126,7 @@ a.plan-point-title.doc-link:hover {
   margin: 0;
   font-size: 0.8125rem;
   color: var(--ink-soft);
+  word-break: keep-all;
 }
 
 /* ── 마크다운 문서 렌더링 (문서 뷰어 페이지 공용) ──── */
@@ -1295,6 +1296,33 @@ body.blog-theme {
 
 body.blog-theme .site-header {
   background: rgba(245, 244, 240, 0.92);
+}
+
+body.blog-theme {
+  background-image: url('/assets/images/blog-tigrelli.webp');
+  background-repeat: no-repeat;
+  background-position: left 24px bottom 0;
+  background-size: 200px auto;
+  background-attachment: fixed;
+}
+
+@media (max-width: 1439px) {
+  body.blog-theme {
+    background-image: none;
+  }
+
+  body.blog-theme .site-footer {
+    background-image: url('/assets/images/blog-tigrelli.webp');
+    background-repeat: no-repeat;
+    background-position: left 16px bottom 0;
+    background-size: 120px auto;
+  }
+
+  body.blog-theme .site-footer-inner {
+    padding-left: 150px;
+    min-height: 128px;
+    align-items: flex-end;
+  }
 }
 
 /* ── 블로그 헤더 보조 ─────────────────────────────── */

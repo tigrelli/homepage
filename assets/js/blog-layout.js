@@ -21,7 +21,7 @@ function renderBlogHeader() {
 
 function renderBlogFooter() {
   const year = new Date().getFullYear();
-  return `<footer class="site-footer"><div class="site-footer-inner"><p class="footer-contact">tigrelli의 개인 블로그 &middot; <a href="/">tigrelli 홈페이지 ↗</a></p><p class="footer-copyright">&copy; ${year} tigrelli. All rights reserved.</p></div></footer>`;
+  return `<footer class="site-footer"><div class="site-footer-inner"><p class="footer-contact">tigrelli의 개인 블로그 &middot; <a href="/">Homepage ↗</a></p><p class="footer-copyright">&copy; ${year} tigrelli. All rights reserved.</p></div></footer>`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
