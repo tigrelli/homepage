@@ -2,7 +2,7 @@ const SITE_NAV = [
   { href: "/", label: "홈" },
   { href: "/about.html", label: "소개" },
   { href: "/portfolio.html", label: "포트폴리오" },
-  { href: "/blog/", label: "블로그" },
+  { href: "https://blog.tigrelli.com/", label: "블로그" },
 ];
 
 function isCurrentPage(href) {
