@@ -16,12 +16,12 @@ function renderBlogHeader() {
     const aria = current ? ' aria-current="page"' : "";
     return `<a href="${item.href}" class="${cls}"${aria}>${item.label}</a>`;
   }).join("");
-  return `<header class="site-header"><div class="site-header-inner"><div class="site-header-left"><a href="/blog/" class="wordmark" aria-label="정태희 블로그"><span class="wordmark-badge">TH</span><span class="wordmark-text">Blog</span></a><nav class="site-nav">${nav}</nav></div><a href="/" class="blog-home-link">정태희 홈페이지 ↗</a></div></header>`;
+  return `<header class="site-header"><div class="site-header-inner"><div class="site-header-left"><a href="/blog/" class="wordmark" aria-label="정태희 블로그"><span class="wordmark-badge">TH</span><span class="wordmark-text">Blog</span></a><nav class="site-nav">${nav}</nav></div><a href="/" class="blog-home-link">Homepage ↗</a></div></header>`;
 }
 
 function renderBlogFooter() {
   const year = new Date().getFullYear();
-  return `<footer class="site-footer"><div class="site-footer-inner"><p class="footer-contact">정태희의 개인 블로그 &middot; <a href="/">정태희 홈페이지 ↗</a></p><p class="footer-copyright">&copy; ${year} 정태희. All rights reserved.</p></div></footer>`;
+  return `<footer class="site-footer"><div class="site-footer-inner"><p class="footer-contact">tigrelli의 개인 블로그 &middot; <a href="/">tigrelli 홈페이지 ↗</a></p><p class="footer-copyright">&copy; ${year} tigrelli. All rights reserved.</p></div></footer>`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
