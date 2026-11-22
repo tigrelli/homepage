@@ -976,6 +976,31 @@ a.plan-point-title.doc-link:hover {
   color: var(--accent-strong);
 }
 
+/* 색상 버튼 변형 (홈 카드 다운로드 등) */
+.detail-link-btn--accent {
+  color: var(--surface);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.detail-link-btn--accent:hover {
+  color: var(--surface);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+.detail-link-btn--green {
+  color: var(--surface);
+  background: #2f7a4f;
+  border-color: #2f7a4f;
+}
+
+.detail-link-btn--green:hover {
+  color: var(--surface);
+  background: #24603d;
+  border-color: #24603d;
+}
+
 /* 임시 이미지 자리 (실제 스크린샷/커버 이미지로 교체 예정) */
 .media-placeholder {
   display: flex;

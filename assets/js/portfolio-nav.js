@@ -5,6 +5,7 @@ const PORTFOLIO_ORDER = [
   { slug: "msds-onpremise", title: "MSDS 솔루션 온프레미스 구축" },
   { slug: "account-book", title: "가계부" },
   { slug: "tft-hideout", title: "TFT Hideout" },
+  { slug: "my-memo", title: "My Memo" },
 ];
 
 function currentSlug() {

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Memo | 포트폴리오 | 정태희</title>
+<meta name="description" content="메모장의 간편함에 폴더 목록과 이미지 삽입을 더한 Windows용 오프라인 메모 앱 My Memo를 기획하고, Claude Code와 협업해 설계·구현·검증·v1.0.0 출시까지 진행한 프로젝트 상세입니다.">
+<meta property="og:title" content="My Memo | 포트폴리오 | 정태희">
+<meta property="og:description" content="메모장의 간편함에 폴더 목록과 이미지 삽입을 더한 Windows용 오프라인 메모 앱 My Memo를 기획하고, Claude Code와 협업해 설계·구현·검증·v1.0.0 출시까지 진행한 프로젝트 상세입니다.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://tigrelli.com/portfolio/my-memo.html">
+<link rel="icon" href="/assets/images/favicon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/images/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+  <div class="container">
+    <p class="detail-breadcrumb"><a href="../portfolio.html">포트폴리오</a> &gt; My Memo</p>
+
+    <section class="section detail-hero">
+      <p class="eyebrow">AI 개인 프로젝트</p>
+      <h1 class="page-title">My Memo</h1>
+      <p class="detail-subtitle">메모장의 간편함에 폴더 목록과 이미지 삽입을 더한 Windows용 오프라인 메모 앱</p>
+      <dl class="detail-meta-row">
+        <div><dt>기간</dt><dd>2026.11.13 &ndash; 2026.11.21 (v1.0.0 출시)</dd></div>
+        <div><dt>역할</dt><dd>PM &middot; 기획 &middot; AI 개발 협업</dd></div>
+        <div><dt>유형</dt><dd>개인 프로젝트 &middot; Windows 데스크톱 앱</dd></div>
+        <div><dt>기술</dt><dd>Tauri 2 &middot; Rust &middot; React &middot; TypeScript &middot; TipTap</dd></div>
+      </dl>
+      <div class="detail-links">
+        <a class="detail-link-btn detail-link-btn--accent" href="../assets/downloads/my-memo-v1.0.0.zip" download="MyMemo_v1.0.0.zip">설치 파일 + 설명서 다운로드 (ZIP, 3.7MB) &darr;</a>
+        <a class="detail-link-btn detail-link-btn--green" href="../assets/downloads/my-memo-guide.pdf" download="MyMemo_소개및사용설명서.pdf">사용설명서만 다운로드 (PDF, 1.9MB) &darr;</a>
+      </div>
+      <p class="doc-notice" style="margin-top:16px;">&#8251; Windows 10(21H2 이상)&middot;11 64비트용입니다. 코드 서명을 하지 않은 개인용 설치 파일이라 처음 실행 시 SmartScreen 경고가 나오면 [추가 정보] &rarr; [실행]을 누르세요.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">프로젝트 개요</h2>
+      <div class="about-prose">
+        <p>My Memo는 생각·아이디어·스크린샷을 이미지와 함께 가볍게 적고, 폴더로 정리하고, 인터넷 없이 내 PC에 일반 파일로 저장하는 개인용 메모 앱입니다.</p>
+        <p>노션·원노트는 자료를 체계적으로 정리하기에 좋지만, 문득 떠오른 생각이나 캡처한 이미지를 가볍게 남기기에는 무겁게 느껴졌습니다.
+        <br>메모장처럼 간편하게 쓰면서 이미지도 넣고 한곳에서 정리할 수 있되, 기록한 메모가 특정 앱이나 서비스에 종속되지 않기를 바랐습니다.</p>
+        <p>그래서 계정·데이터베이스 없이 내 PC에 보관하고, 저장 형식은 범용적인 Markdown(<code>.md</code>) 파일로 정해 메모장 등 다른 편집기에서도 열 수 있게 했습니다. 필요하면 HTML로 내보내 브라우저에서 이미지와 함께 볼 수도 있습니다.</p>
+        <p class="detail-keypoint">가볍게 기록하고, 편하게 정리하고, 내 기록을 온전히 내 것으로 보관하는 메모 앱 &mdash; My Memo는 이 필요에서 시작했습니다.</p>
+      </div>
+    </section>
+
+    <section class="section challenge">
+      <p class="challenge-label">핵심 과제 01</p>
+      <h2 class="challenge-title">&lsquo;파일이 곧 데이터&rsquo;인 저장 구조</h2>
+      <p class="challenge-lead">앱이 없어져도 메모를 그대로 열 수 있도록, 데이터베이스 대신 사용자가 고른 폴더의 일반 파일을 원본으로 삼았습니다.</p>
+      <div class="axis-grid">
+        <div class="axis-chip"><div class="axis-num">1 : 1</div><div class="axis-desc">메모 1개 = <code>.md</code> 파일 1개</div></div>
+        <div class="axis-chip"><div class="axis-num">FOLDER</div><div class="axis-desc">앱 목록 = 탐색기의 실제 폴더 구조</div></div>
+        <div class="axis-chip"><div class="axis-num">TITLE</div><div class="axis-desc">본문 첫 줄 = 제목 = 파일 이름</div></div>
+        <div class="axis-chip"><div class="axis-num">PLAIN</div><div class="axis-desc">서식 도구 없이, 기호는 화면에서만 꾸밈</div></div>
+      </div>
+      <p class="detail-keypoint axis-result">탐색기나 메모장에서 바꾼 이름·내용도 앱에 바로 반영되도록 외부 변경 감지와 충돌 시 사본 보존 규칙을 함께 설계했습니다.</p>
+      <p class="challenge-gallery-label">관련 화면</p>
+      <div class="detail-gallery">
+          <figure class="detail-gallery-item">
+            <a href="../assets/images/my-memo-image-memo.webp" target="_blank" rel="noopener"><img src="../assets/images/my-memo-image-memo.webp" alt="메인 화면 — 왼쪽 폴더·메모 목록, 오른쪽 본문에 제목·목록 기호와 이미지가 들어간 메모" loading="lazy"></a>
+            <figcaption>메인 화면 &middot; 이미지가 들어간 메모</figcaption>
+          </figure>
+          <figure class="detail-gallery-item">
+            <a href="../assets/images/my-memo-search.webp" target="_blank" rel="noopener"><img src="../assets/images/my-memo-search.webp" alt="검색 화면 — 제목·본문 검색 결과 목록과 본문 일치 부분 강조" loading="lazy"></a>
+            <figcaption>제목&middot;본문 검색</figcaption>
+          </figure>
+          <figure class="detail-gallery-item">
+            <a href="../assets/images/my-memo-autosave.webp" target="_blank" rel="noopener"><img src="../assets/images/my-memo-autosave.webp" alt="새 메모 입력 후 화면 — 첫 줄이 목록 제목으로 반영되고 상태바에 자동 저장됨 표시" loading="lazy"></a>
+            <figcaption>첫 줄 제목 &middot; 자동 저장</figcaption>
+          </figure>
+          <figure class="detail-gallery-item">
+            <a href="../assets/images/my-memo-overlay.webp" target="_blank" rel="noopener"><img src="../assets/images/my-memo-overlay.webp" alt="이미지 원본 오버레이 — 본문 이미지를 눌러 어두운 배경 위에 원본을 크게 보기" loading="lazy"></a>
+            <figcaption>이미지 원본 크게 보기</figcaption>
+          </figure>
+      </div>
+    </section>
+
+    <section class="section challenge">
+      <p class="challenge-label">핵심 과제 02</p>
+      <h2 class="challenge-title">데이터를 잃지 않는 안전장치</h2>
+      <div class="about-prose">
+        <p>메모 앱에서 가장 치명적인 문제는 데이터 유실이라고 보고, 리스크별로 대응 규칙을 먼저 정한 뒤 구현했습니다.</p>
+      </div>
+      <ul class="result-grid">
+        <li><strong>강제 종료&middot;정전</strong> &mdash; 임시 파일에 쓴 뒤 교체하는 저장 방식, 재실행 시 복구</li>
+        <li><strong>실수로 삭제</strong> &mdash; 앱 휴지통(30일) &rarr; Windows 휴지통 이중 보호, 어느 쪽에서 복원해도 원래 위치로</li>
+        <li><strong>이미지 오삭제</strong> &mdash; 사용하지 않는 이미지는 24시간 유예 후 묶음으로 휴지통 이동</li>
+        <li><strong>장기 보관</strong> &mdash; 주기 자동 백업(.zip)과 전체 복원, 없어진 이미지만 골라 복원</li>
+      </ul>
+      <p class="challenge-gallery-label">관련 화면</p>
+      <div class="detail-gallery">
+          <figure class="detail-gallery-item">
+            <a href="../assets/images/my-memo-trash.webp" target="_blank" rel="noopener"><img src="../assets/images/my-memo-trash.webp" alt="휴지통 화면 — 삭제한 메모 목록과 읽기 전용 미리보기, 복원 버튼" loading="lazy"></a>
+            <figcaption>휴지통 &middot; 읽기 전용 미리보기와 복원</figcaption>
+          </figure>
+          <figure class="detail-gallery-item">
+            <a href="../assets/images/my-memo-settings.webp" target="_blank" rel="noopener"><img src="../assets/images/my-memo-settings.webp" alt="설정 화면 — 저장 폴더, 휴지통 자동 비우기, 자동 백업 주기와 지금 백업·백업에서 복원" loading="lazy"></a>
+            <figcaption>설정 &middot; 저장 폴더&middot;휴지통&middot;백업</figcaption>
+          </figure>
+      </div>
+    </section>
+
+    <section class="section challenge">
+      <p class="challenge-label">핵심 과제 03</p>
+      <h2 class="challenge-title">승인 단계를 둔 AI 협업 개발 프로세스</h2>
+      <div class="about-prose">
+        <p>PRD와 기술 설계를 합친 최종설계서(기능 F-01~F-19, 처리 규칙 R-xx)와 화면설계서(S-01~S-12)를 먼저 확정한 뒤, Claude Code와 함께 구현했습니다.</p>
+        <p>개발은 17개 section, 141개 task로 나누고, task마다 Claude Code가 완료 보고를 하면 직접 확인해 승인한 뒤에만 다음 task로 넘어가도록 했습니다. 커밋도 section 단위로 승인 후에만 진행했습니다.</p>
+        <p>설계서에 없는 결정이 필요하면 AI가 임의로 정하지 않고 &lsquo;결정 대기&rsquo; 표에 권장안과 함께 올리도록 해, 기술 선택&middot;예외 처리 같은 판단을 PM이 기록으로 남기며 결정했습니다.</p>
+        <p class="detail-keypoint">테스트 이름에 규칙 ID를 넣어 요구사항 &rarr; 규칙 &rarr; 자동 테스트 &rarr; 수용 기준을 추적할 수 있게 했습니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">결과</h2>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num">27 / 27</div><div class="stat-label">수용 기준 통과 (설치판)</div></div>
+        <div class="stat-card"><div class="stat-num">1,414건</div><div class="stat-label">자동 테스트 통과 (Rust 824 &middot; 화면 590)</div></div>
+        <div class="stat-card"><div class="stat-num">약 1초</div><div class="stat-label">실행 후 마지막 메모 표시 (목표 2초)</div></div>
+      </div>
+      <ul class="result-grid">
+        <li><strong>v1.0.0 설치 파일</strong>(NSIS) 출시</li>
+        <li>메모 1,000개 환경에서 <strong>성능 목표 충족</strong> &mdash; 메모 전환 최대 27ms, 검색 151ms, 대기 메모리 96MB</li>
+        <li>앱이 만드는 <strong>네트워크 요청 0건</strong>, 인터넷 없이 모든 기능 동작</li>
+        <li>소개 및 사용 설명서 작성</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-heading">회고</h2>
+      <div class="retro">
+        <div class="about-prose">
+          <p class="retro-lead">AI와 개발 속도를 맞추려면, 무엇을 만들지보다 &lsquo;무엇을 만들지 않을지&rsquo;와 &lsquo;어떻게 확인할지&rsquo;를 먼저 정해 두는 것이 중요했습니다.</p>
+          <p>서식 도구, 클라우드 동기화, 로그인처럼 v1.0에서 제외할 범위를 설계서에 명시하고, 설계서에 없는 기능은 추가하지 않는다는 원칙을 두어 범위가 흔들리지 않게 했습니다.</p>
+          <p>또한 기능마다 수용 기준과 테스트를 연결해 두었기 때문에, 구현 결과가 많아져도 무엇이 확인되었고 무엇이 남았는지 PM이 판단할 수 있었습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <div id="detail-prevnext"></div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="../assets/js/layout.js" defer></script>
+<script src="../assets/js/portfolio-nav.js" defer></script>
+</body>
+</html>
